@@ -36,7 +36,7 @@ export const setLoginFormLoading = (val) => ({ type: SET_LOGIN_FORM_LOADING, val
 
 export const getUserData = () => {
     return (dispatch, getState) => {
-        api.get(`users/me`)
+        api.get(`auth/me`)
             .then((response) => {
                 if (response.data.statusCode === 66) {
                     showNotification(response.data.responseMessage, 'danger', true);
@@ -60,7 +60,7 @@ export const login = ({username, password}) => {
         
         dispatch(setLoginFormLoading(true));
 
-        api.post(`users/login`, {username, password})
+        api.post(`auth/login`, {username, password})
             .then((response) => {
                 if (response.data.statusCode === 0) {
                     showNotification(response.data.responseMessage, 'danger');

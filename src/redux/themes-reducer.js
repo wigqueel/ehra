@@ -112,18 +112,19 @@ export const getItems = (currentPage, pageSize) => {
         if (!pageSize) {
             pageSize = getState().themes.pageSize;
         }
-        
-        api.get(`themes?per_page=${pageSize}&page_number=${currentPage}&sort_field=${sortField}&sort_type=${sortType}${filterString}`)
-            .then((response) => {
-                dispatch(setItems(response.data));
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-            .finally(() => {
-                
-                // dispatch(itemsLoading(false));
-            })
+
+        async function getItemsAsyncFunction(){
+                try {
+                const response = await api.get(`themes?per_page=${pageSize}&page_number=${currentPage}&sort_field=${sortField}&sort_type=${sortType}${filterString}`);
+                    dispatch(setItems(response.data));
+                }
+                catch(error) {
+                    console.log(error)
+                }
+                finally {
+                 // dispatch(itemsLoading(false));
+                }
+        }
     }
 };
 
@@ -134,83 +135,99 @@ export const changeSort = (oldSortField, oldSortType, sortField) => {
     }
 };
 
+
+
 export const setActive = (id) => {
     return (dispatch, getState) => {
-        
-        api.get(`themes/activate/${id}`)
-            .then((response) => {
+        async function setActiveAsyncFunction(){
+            try{
+                const response = await api.get(`themes/activate/${id}`);
                 showNotification('Theme was successfully activated', 'success', 'shifted');
                 dispatch(getItems());
-            })
-            .catch((error) => {
+            }
+            catch(error) {
                 console.log(error)
-            })
-            .finally(() => {
-                // dispatch(itemsLoading(false));
-                
-            })
+            }
+            finally {
+// dispatch(itemsLoading(false));
+            }
+
+        }
     }
 };
 
 export const deleteItem = (id) => {
     return (dispatch, getState) => {
-        
-        api.get(`themes/delete/${id}`)
-            .then((response) => {
+        async function deleteItemAsyncFunction(){
+            try{
+                const response = await api.get(`themes/delete/${id}`);
                 dispatch(getItems());
-            })
-            .catch((error) => {
+            }
+            catch(error) {
                 console.log(error)
-            })
-            .finally(() => {
-                // dispatch(itemsLoading(false));
-            })
+            }
+            finally {
+// dispatch(itemsLoading(false));
+            }
+
+        }
     }
 };
 
 export const getItemData = (id) => {
     return (dispatch, getState) => {
-        
-        api.get(`themes/view/${id}`)
-            .then((response) => {
+
+        async function getItemDataAsyncFunction(){
+            try{
+                const response = await api.get(`themes/view/${id}`);
                 dispatch(setItem(response.data));
-            })
-            .catch((error) => {
+            }
+            catch(error) {
                 console.log(error)
-            })
-            .finally(() => {
-                // dispatch(itemsLoading(false));
-            })
+            }
+            finally {
+// dispatch(itemsLoading(false));
+            }
+
+        }
     }
 };
 
 export const createItem = ({name}) => {
     return (dispatch, getState) => {
-        api.post(`themes/utilize`, {name})
-            .then((response) => {
+
+        async function createItemAsyncFunction(){
+            try{
+                const response = await api.get(`themes/utilize`, {name});
                 dispatch(getItems());
-            })
-            .catch((error) => {
+            }
+            catch(error) {
                 console.log(error)
-            })
-            .finally(() => {
-                // dispatch(itemsLoading(false));
-            })
+            }
+            finally {
+// dispatch(itemsLoading(false));
+            }
+
+        }
     }
 };
 
 export const updateItem = ({name, id}) => {
     return (dispatch, getState) => {
-        api.put(`themes/utilize/${id}`, {name})
-            .then((response) => {
+
+        async function updateItemAsyncFunction(){
+            try{
+                const response = await api.get(`themes/utilize/${id}`, {name});
                 dispatch(getItems());
-            })
-            .catch((error) => {
+            }
+            catch(error) {
                 console.log(error)
-            })
-            .finally(() => {
-                // dispatch(itemsLoading(false));
-            })
+            }
+            finally {
+// dispatch(itemsLoading(false));
+            }
+
+        }
     }
 };
 

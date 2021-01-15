@@ -3,8 +3,16 @@ import React from 'react';
 import HeaderDropdownConrainer from './styled';
 import PhoneIcon from '../../../../assets/icons/phone.svg';
 import MailIcon from '../../../../assets/icons/mail.svg';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../../../redux/auth-reducer';
 
 const HeaderDropdown = () => {
+
+    const dispatch = useDispatch();
+
+    const onClickLogout = () => {
+        dispatch(logout());
+    }
 
     return (
         <HeaderDropdownConrainer data-uk-dropdown="mode: click; offset: 10">
@@ -29,7 +37,7 @@ const HeaderDropdown = () => {
 
             <div className="dropdown-body-2">
                 <div className="dropdown-body-2-item"><a href="/my-profile">Мій профіль</a></div>
-                <div className="dropdown-body-2-item"><a className="signout" href="/login/logout" data-method="post">Вийти</a></div>
+                <div className="dropdown-body-2-item"><a className="signout" href="#" data-method="post" onClick={onClickLogout}>Вийти</a></div>
             </div>
         </HeaderDropdownConrainer>
     )

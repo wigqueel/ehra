@@ -47,6 +47,8 @@ const View = () => {
         }
     }
 
+    const dispatch = useDispatch();
+
     const setActiveTheme = (id) => {
         dispatch(setActive(id));
     }
@@ -55,7 +57,6 @@ const View = () => {
         dispatch(deleteItem(id));
     }
 
-    const dispatch = useDispatch();
     let {id} = useParams();
     
     useEffect(() => {

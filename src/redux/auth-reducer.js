@@ -81,4 +81,27 @@ export const login = ({username, password}) => {
     }
 };
 
+export const logout = () => {
+    return (dispatch, getState) => {
+
+        api.get(`auth/logout`)
+            .then((response) => {
+                console.log(response);
+                if (response.data.statusCode === 0) {
+                    showNotification(response.data.responseMessage, 'danger');
+                } else {
+                    dispatch(setUserData(null, null, null, null, null, false));
+                    showNotification(response.data.responseMessage, 'success');
+                }
+            })
+            .catch((error) => {
+                // console.log(error)
+            })
+            .finally(() => {
+                // dispatch(itemsLoading(false));
+                
+            })
+    }
+};
+
 export default AutReducer;

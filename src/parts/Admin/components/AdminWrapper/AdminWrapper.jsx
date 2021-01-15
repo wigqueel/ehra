@@ -12,56 +12,64 @@ import View from '../CRUDs/Themes/View';
 import Create from '../CRUDs/Themes/Create';
 import Update from '../CRUDs/Themes/Update';
 import StyledNotification from '../styled/StyledNotification';
+import { useSelector } from 'react-redux';
 
 
 const AdminWrapper = () => {
 
+    const isAuth = useSelector(state => state.auth.isAuth);
+
     return (
         <>
-            <Header />
-            <Aside />
+            {isAuth 
+                ? <>    
+                    <Header />
+                    <Aside />
 
-            <StyledNotification />
+                    <StyledNotification />
 
-            <Main>
-                <Switch>
-                    <Route
-                        exact
-                        path="/admiral-admin"
-                        component={Dashboard}
-                    />
+                    <Main>
+                        <Switch>
+                            <Route
+                                exact
+                                path="/admiral-admin"
+                                component={Dashboard}
+                            />
 
-                    <Route
-                        exact
-                        path="/admiral-admin/themes"
-                        component={List}
-                    />
+                            <Route
+                                exact
+                                path="/admiral-admin/themes"
+                                component={List}
+                            />
 
-                    <Route
-                        exact
-                        path="/admiral-admin/themes/view/:id"
-                        component={View}
-                    />
+                            <Route
+                                exact
+                                path="/admiral-admin/themes/view/:id"
+                                component={View}
+                            />
 
-                    <Route
-                        exact
-                        path="/admiral-admin/themes/update/:id"
-                        component={Update}
-                    />
+                            <Route
+                                exact
+                                path="/admiral-admin/themes/update/:id"
+                                component={Update}
+                            />
 
-                    <Route
-                        exact
-                        path="/admiral-admin/themes/create"
-                        component={Create}
-                    />
-                    
-                    
-                    
-                    <Route path="/404" component={NotFound}/>
+                            <Route
+                                exact
+                                path="/admiral-admin/themes/create"
+                                component={Create}
+                            />
+                            
+                            
+                            
+                            <Route path="/404" component={NotFound}/>
 
-                    <Redirect to="/404"/>
-                </Switch>
-            </Main>
+                            <Redirect to="/404"/>
+                        </Switch>
+                    </Main>
+                </>
+                : <Redirect to="/admiral-admin/login" />
+            }
         </>
     )
 }

@@ -97,7 +97,7 @@ export const changeSortActionCreator = (oldSortField, oldSortType, sortField) =>
 
 
 export const getItems = (currentPage, pageSize) => {
-    return (dispatch, getState) => {
+    return async (dispatch, getState) => {
         
         const sortField = getState().themes.sortField;
         const sortType = getState().themes.sortType;
@@ -113,20 +113,21 @@ export const getItems = (currentPage, pageSize) => {
             pageSize = getState().themes.pageSize;
         }
 
-        async function getItemsAsyncFunction(){
-                try {
-                const response = await api.get(`themes?per_page=${pageSize}&page_number=${currentPage}&sort_field=${sortField}&sort_type=${sortType}${filterString}`);
-                    dispatch(setItems(response.data));
-                }
-                catch(error) {
-                    console.log(error)
-                }
-                finally {
-                 // dispatch(itemsLoading(false));
-                }
+
+        try {
+            let response = await api.get(`themes?per_page=${pageSize}&page_number=${currentPage}&sort_field=${sortField}&sort_type=${sortType}${filterString}`);
+            dispatch(setItems(response.data));
+
         }
-    }
-};
+
+        catch(error) {
+            console.log(error)
+        }
+        finally {
+            // dispatch(itemsLoading(false));
+        }
+        }
+    };
 
 export const changeSort = (oldSortField, oldSortType, sortField) => {
     return (dispatch, getState) => {
@@ -138,49 +139,57 @@ export const changeSort = (oldSortField, oldSortType, sortField) => {
 
 
 export const setActive = (id) => {
-    return (dispatch, getState) => {
-        async function setActiveAsyncFunction(){
-            try{
-                const response = await api.get(`themes/activate/${id}`);
-                showNotification('Theme was successfully activated', 'success', 'shifted');
+    return async (dispatch, getState) => {
+        try {
+            let response = await api.get(`themes/activate/${id}`);
+            if (response.data.statusCode === 1) {
+                showNotification(response.data.responseMessage, 'success', 'shifted');
+                dispatch(getItems());
+            } else if (response.data.statusCode === 0) {
+                showNotification(response.data.responseMessage, 'danger', 'shifted');
                 dispatch(getItems());
             }
-            catch(error) {
-                console.log(error)
-            }
-            finally {
-// dispatch(itemsLoading(false));
-            }
-
+        } catch (error) {
+            console.log(error)
+        } finally {
+            // dispatch(itemsLoading(false));
         }
     }
 };
 
 export const deleteItem = (id) => {
-    return (dispatch, getState) => {
-        async function deleteItemAsyncFunction(){
+    return async (dispatch, getState) => {
+
             try{
-                const response = await api.get(`themes/delete/${id}`);
-                dispatch(getItems());
+                let response = await api.get(`themes/delete/${id}`);
+                if (response.data.statusCode === 1) {
+                    showNotification(response.data.responseMessage, 'success', 'shifted');
+                    dispatch(getItems());
+                }
+                else if (response.data.statusCode === 0) {
+                    showNotification(response.data.responseMessage, 'danger', 'shifted');
+                    dispatch(getItems());
+                }
             }
             catch(error) {
                 console.log(error)
             }
             finally {
-// dispatch(itemsLoading(false));
+            // dispatch(itemsLoading(false));
             }
 
-        }
+
     }
 };
 
 export const getItemData = (id) => {
-    return (dispatch, getState) => {
+    return async (dispatch, getState) => {
 
-        async function getItemDataAsyncFunction(){
             try{
-                const response = await api.get(`themes/view/${id}`);
-                dispatch(setItem(response.data));
+                let response = await api.get(`themes/view/${id}`);
+                debugger;
+                    dispatch(setItem(response.data));
+
             }
             catch(error) {
                 console.log(error)
@@ -189,17 +198,22 @@ export const getItemData = (id) => {
 // dispatch(itemsLoading(false));
             }
 
-        }
     }
 };
 
 export const createItem = ({name}) => {
-    return (dispatch, getState) => {
-
-        async function createItemAsyncFunction(){
+    return async (dispatch, getState) => {
             try{
-                const response = await api.get(`themes/utilize`, {name});
-                dispatch(getItems());
+
+                let response = await api.get(`themes/utilize`, {name});
+                if (response.data.statusCode === 2) {
+                    showNotification(response.data.responseMessage, 'success', 'shifted');
+                    dispatch(getItems());
+                }
+                else if (response.data.statusCode === 0) {
+                    showNotification(response.data.responseMessage, 'danger', 'shifted');
+                    dispatch(getItems());
+                }
             }
             catch(error) {
                 console.log(error)
@@ -208,17 +222,16 @@ export const createItem = ({name}) => {
 // dispatch(itemsLoading(false));
             }
 
-        }
+
     }
 };
 
 export const updateItem = ({name, id}) => {
-    return (dispatch, getState) => {
-
-        async function updateItemAsyncFunction(){
+    return async (dispatch, getState) => {
             try{
-                const response = await api.get(`themes/utilize/${id}`, {name});
-                dispatch(getItems());
+                let response = await api.get(`themes/utilize/${id}`, {name});
+                    dispatch(getItems());
+
             }
             catch(error) {
                 console.log(error)
@@ -227,7 +240,7 @@ export const updateItem = ({name, id}) => {
 // dispatch(itemsLoading(false));
             }
 
-        }
+
     }
 };
 

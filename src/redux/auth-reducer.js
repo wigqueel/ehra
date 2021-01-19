@@ -99,7 +99,6 @@ export const logout = () => {
             })
             .finally(() => {
                 // dispatch(itemsLoading(false));
-                
             })
     }
 };

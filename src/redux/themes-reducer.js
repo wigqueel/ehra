@@ -1,6 +1,5 @@
 import {api} from '../api/api';
 import { showNotification } from '../parts/Admin/utils/notifications/notifications';
-// import {setDataLoading} from './app-reducer';
 
 const SET_ITEMS = 'SET_ITEMS';
 const SET_ITEM = 'SET_ITEM';
@@ -39,7 +38,6 @@ const themesReducer = (state = initialState, action) => {
                 currentPage: action.currentPage,
             }
         case CHANGE_SORT:
-
             let newSortType = '';
 
             if (action.oldSortField === action.sortField) {
@@ -94,8 +92,6 @@ export const changeSortActionCreator = (oldSortField, oldSortType, sortField) =>
     sortField
 });
 
-
-
 export const getItems = (currentPage, pageSize) => {
     return async (dispatch, getState) => {
         
@@ -113,139 +109,148 @@ export const getItems = (currentPage, pageSize) => {
             pageSize = getState().themes.pageSize;
         }
 
-
         try {
             let response = await api.get(`themes?per_page=${pageSize}&page_number=${currentPage}&sort_field=${sortField}&sort_type=${sortType}${filterString}`);
+            if (response.data.statusCode === 1) {
+                //
+            } else {
+                showNotification(response.data.responseMessage, 'danger', 'shifted');
+            }
+
             dispatch(setItems(response.data));
-
-        }
-
-        catch(error) {
+        } catch(error) {
+            showNotification('Some error occured', 'danger', 'shifted');
             console.log(error)
+        } finally {
+            
         }
-        finally {
-            // dispatch(itemsLoading(false));
-        }
-        }
-    };
+    }
+};
 
 export const changeSort = (oldSortField, oldSortType, sortField) => {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(changeSortActionCreator(oldSortField, oldSortType, sortField));
         dispatch(getItems());
     }
 };
 
-
-
 export const setActive = (id) => {
-    return async (dispatch, getState) => {
+    return async (dispatch) => {
+
         try {
             let response = await api.get(`themes/activate/${id}`);
             if (response.data.statusCode === 1) {
                 showNotification(response.data.responseMessage, 'success', 'shifted');
                 dispatch(getItems());
-            } else if (response.data.statusCode === 0) {
+            } else {
                 showNotification(response.data.responseMessage, 'danger', 'shifted');
-                dispatch(getItems());
             }
         } catch (error) {
+            showNotification('Some error occured', 'danger', 'shifted');
             console.log(error)
         } finally {
-            // dispatch(itemsLoading(false));
+            
         }
+
     }
 };
 
 export const deleteItem = (id) => {
-    return async (dispatch, getState) => {
+    return async (dispatch) => {
 
-            try{
-                let response = await api.get(`themes/delete/${id}`);
-                if (response.data.statusCode === 1) {
-                    showNotification(response.data.responseMessage, 'success', 'shifted');
-                    dispatch(getItems());
-                }
-                else if (response.data.statusCode === 0) {
-                    showNotification(response.data.responseMessage, 'danger', 'shifted');
-                    dispatch(getItems());
-                }
+        try {
+            let response = await api.get(`themes/delete/${id}`);
+            if (response.data.statusCode === 1) {
+                showNotification(response.data.responseMessage, 'success', 'shifted');
+                dispatch(getItems());
+            } else {
+                showNotification(response.data.responseMessage, 'danger', 'shifted');
             }
-            catch(error) {
-                console.log(error)
-            }
-            finally {
-            // dispatch(itemsLoading(false));
-            }
+        } catch(error) {
+            showNotification('Some error occured', 'danger', 'shifted');
+            console.log(error)
+        } finally {
 
+        }
 
     }
 };
 
 export const getItemData = (id) => {
-    return async (dispatch, getState) => {
-
-            try{
-                let response = await api.get(`themes/view/${id}`);
-                debugger;
-                    dispatch(setItem(response.data));
-
+    return async (dispatch) => {
+        try {
+            let response = await api.get(`themes/view/${id}`);
+            if (response.data.statusCode === 1) {
+                dispatch(setItem(response.data));
+            } else {
+                showNotification(response.data.responseMessage, 'danger', 'shifted');
             }
-            catch(error) {
-                console.log(error)
-            }
-            finally {
-// dispatch(itemsLoading(false));
-            }
-
+        } catch(error) {
+            showNotification('Some error occured', 'danger', 'shifted');
+            console.log(error)
+        } finally {
+            
+        }
     }
 };
 
 export const createItem = ({name}) => {
-    return async (dispatch, getState) => {
-            try{
+    return async (dispatch) => {
+        try {
+            let response = await api.post(`themes/utilize`, {name});
 
-                let response = await api.get(`themes/utilize`, {name});
-                if (response.data.statusCode === 2) {
-                    showNotification(response.data.responseMessage, 'success', 'shifted');
-                    dispatch(getItems());
-                }
-                else if (response.data.statusCode === 0) {
-                    showNotification(response.data.responseMessage, 'danger', 'shifted');
-                    dispatch(getItems());
-                }
+            if (response.data.statusCode === 1) {
+                dispatch(getItems());
+                showNotification(response.data.responseMessage, 'success', 'shifted');
+            } else if (response.data.statusCode === 2) {
+                let message = '';
+                response.data.responseMessage.map(m => {
+                    message += `${m} `;
+                });
+                
+                showNotification(message, 'danger', 'shifted');
+            } else {
+                showNotification(response.data.responseMessage, 'danger', 'shifted');
             }
-            catch(error) {
-                console.log(error)
-            }
-            finally {
-// dispatch(itemsLoading(false));
-            }
-
-
+        } catch(error) {
+            showNotification('Some error occured', 'danger', 'shifted');
+            console.log(error)
+        } finally {
+            
+        }
     }
 };
 
 export const updateItem = ({name, id}) => {
-    return async (dispatch, getState) => {
-            try{
-                let response = await api.get(`themes/utilize/${id}`, {name});
-                    dispatch(getItems());
-
+    return async (dispatch) => {
+        try{
+            let response = await api.put(`themes/utilize/${id}`, {name});
+            
+            if (response.data.statusCode === 1) {
+                dispatch(getItems());
+                showNotification(response.data.responseMessage, 'success', 'shifted');
+            } else if (response.data.statusCode === 2) {
+                let message = '';
+                response.data.responseMessage.map(m => {
+                    message += `${m} `;
+                });
+                
+                showNotification(message, 'danger', 'shifted');
+            } else {
+                showNotification(response.data.responseMessage, 'danger', 'shifted');
             }
-            catch(error) {
-                console.log(error)
-            }
-            finally {
-// dispatch(itemsLoading(false));
-            }
 
-
+        } catch(error) {
+            showNotification('Some error occured', 'danger', 'shifted');
+            console.log(error)
+        } finally {
+            
+        }
     }
 };
 
 export const applyFilter = (values) => {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         let filterString = '';
 
         if (values) {
@@ -256,6 +261,7 @@ export const applyFilter = (values) => {
                 filterString += `&flt_${itemKeys[i]}=${itemValues[i]}`;
             }
         }
+
         dispatch(setFilterString(filterString));
         dispatch(getItems());
     }

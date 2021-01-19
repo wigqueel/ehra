@@ -36,6 +36,8 @@ const ViewTable = styled.table`
 
 const View = () => {
     const item = useSelector(state => state.themes.item);
+    const dispatch = useDispatch();
+
     let resultArray = [];
 
     if (item) {
@@ -46,8 +48,6 @@ const View = () => {
             resultArray.push(<tr><th>{itemKeys[i]}</th><td>{itemValues[i]}</td></tr>)   
         }
     }
-
-    const dispatch = useDispatch();
 
     const setActiveTheme = (id) => {
         dispatch(setActive(id));
@@ -69,7 +69,7 @@ const View = () => {
             let itemValues = Object.values(item);
 
             for (let i = 0; i < itemKeys.length; i++) {
-                resultArray.push(<tr><th>{itemKeys[i]}</th><td>{itemValues[i]}</td></tr>)   
+                resultArray.push(<tr><th>{itemKeys[i]}</th><td>{itemValues[i]}</td></tr>)
             }
 
             dispatch(setBreadcrumbs([
@@ -96,7 +96,7 @@ const View = () => {
             </CardHeader>
 
             <ViewTable>
-                {resultArray} 
+                {/* {resultArray}  */}
             </ViewTable>
 
             <ButtonsWrapper>

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setActive, deleteItem, getItemData, updateItem } from '../../../../../redux/themes-reducer';
 import CardHeader from '../../styled/CardHeader';
 import CardTitle from '../../styled/CardTitle';
-import { useParams } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import ButtonsWrapper from '../../common/ButtonsWrapper';
 import Button from '../../common/AdmiralNavlink';
 import styled from 'styled-components';
@@ -28,6 +28,8 @@ const StyledField = styled(Field)`
 
 const Update = () => {
     const item = useSelector(state => state.themes.item);
+    const redirectToList = useSelector(state => state.themes.redirectToList);
+
     const dispatch = useDispatch();
     let {id} = useParams();
     
@@ -67,34 +69,39 @@ const Update = () => {
 
     return (
         <>
-            <CardHeader>
-                <CardTitle>Theme update: {item && item.name}</CardTitle>
-            </CardHeader>
+            {redirectToList 
+                ? <Redirect to={'/admiral-admin/themes'} />
+                : <>
+                    <CardHeader>
+                        <CardTitle>Theme update: {item && item.name}</CardTitle>
+                    </CardHeader>
 
-            {item && <Form
-                onSubmit={onSubmit}
-                initialValues={{name: item.name, id: item.id}}
-                render={({ handleSubmit, form, submitting, pristine, values }) => (
-                    <form onSubmit={handleSubmit} className={'uk-margin-top'}>
-                        <div>
-                            {item && <StyledField
-                                name="name"
-                                component="input"
-                                type="text"
-                                placeholder="Theme name"
-                                // initialValue={item.name}
-                                // defaultValue={item.name}
-                            />}
-                        </div>
-                        
-                        <ButtonsWrapper>
-                            <SubmitButton type="submit" disabled={submitting || pristine} className={'primary'}>Update theme</SubmitButton>
-                            <Button type={'primary'} action={setActiveTheme} elementId={id} to={false}>Set active theme</Button>
-                            <Button type={'danger'} action={onClickDeleteTheme} elementId={id} to={'/admiral-admin/themes'}>Delete theme</Button>
-                        </ButtonsWrapper>
-                    </form>
-                )}
-            />}
+                    {item && <Form
+                        onSubmit={onSubmit}
+                        initialValues={{name: item.name, id: item.id}}
+                        render={({ handleSubmit, form, submitting, pristine, values }) => (
+                            <form onSubmit={handleSubmit} className={'uk-margin-top'}>
+                                <div>
+                                    {item && <StyledField
+                                        name="name"
+                                        component="input"
+                                        type="text"
+                                        placeholder="Theme name"
+                                        // initialValue={item.name}
+                                        // defaultValue={item.name}
+                                    />}
+                                </div>
+                                
+                                <ButtonsWrapper>
+                                    <SubmitButton type="submit" disabled={submitting || pristine} className={'primary'}>Update theme</SubmitButton>
+                                    <Button type={'primary'} action={setActiveTheme} elementId={id} to={false}>Set active theme</Button>
+                                    <Button type={'danger'} action={onClickDeleteTheme} elementId={id} to={'/admiral-admin/themes'}>Delete theme</Button>
+                                </ButtonsWrapper>
+                            </form>
+                        )}
+                    />}
+                </>
+            }
         </>
     );
 };

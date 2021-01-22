@@ -6,6 +6,9 @@ const SET_ITEM = 'SET_ITEM';
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 const CHANGE_SORT = 'CHANGE_SORT';
 const SET_FILTER_STRING = 'SET_FILTER_STRING';
+const SET_REDIRECT = 'SET_REDIRECT';
+
+const ENTITY = 'themes';
 
 const initialState = {
     items: null,
@@ -17,6 +20,7 @@ const initialState = {
     sortField: 'id',
     sortType: 'sort_desc',
     filterString: '',
+    redirectToList: false,
 }
 
 const themesReducer = (state = initialState, action) => {
@@ -60,6 +64,11 @@ const themesReducer = (state = initialState, action) => {
                 ...state,
                 filterString: action.payload
             }
+        case SET_REDIRECT:
+            return {
+                ...state,
+                redirectToList: action.payload
+            }
         default:
             return state;
     }
@@ -78,6 +87,11 @@ const setItem = data => ({
 const setFilterString = (filterString) => ({ 
     type: SET_FILTER_STRING, 
     payload: filterString
+});
+
+export const setRedirect = (val) => ({ 
+    type: SET_REDIRECT, 
+    payload: val 
 });
 
 export const setCurrentPage = (currentPage) => ({ 
@@ -110,7 +124,7 @@ export const getItems = (currentPage, pageSize) => {
         }
 
         try {
-            let response = await api.get(`themes?per_page=${pageSize}&page_number=${currentPage}&sort_field=${sortField}&sort_type=${sortType}${filterString}`);
+            let response = await api.get(`${ENTITY}?per_page=${pageSize}&page_number=${currentPage}&sort_field=${sortField}&sort_type=${sortType}${filterString}`);
             if (response.data.statusCode === 1) {
                 //
             } else {
@@ -138,7 +152,7 @@ export const setActive = (id) => {
     return async (dispatch) => {
 
         try {
-            let response = await api.get(`themes/activate/${id}`);
+            let response = await api.get(`${ENTITY}/activate/${id}`);
             if (response.data.statusCode === 1) {
                 showNotification(response.data.responseMessage, 'success', 'shifted');
                 dispatch(getItems());
@@ -159,7 +173,7 @@ export const deleteItem = (id) => {
     return async (dispatch) => {
 
         try {
-            let response = await api.get(`themes/delete/${id}`);
+            let response = await api.get(`${ENTITY}/delete/${id}`);
             if (response.data.statusCode === 1) {
                 showNotification(response.data.responseMessage, 'success', 'shifted');
                 dispatch(getItems());
@@ -179,7 +193,7 @@ export const deleteItem = (id) => {
 export const getItemData = (id) => {
     return async (dispatch) => {
         try {
-            let response = await api.get(`themes/view/${id}`);
+            let response = await api.get(`${ENTITY}/view/${id}`);
             if (response.data.statusCode === 1) {
                 dispatch(setItem(response.data));
             } else {
@@ -197,9 +211,10 @@ export const getItemData = (id) => {
 export const createItem = ({name}) => {
     return async (dispatch) => {
         try {
-            let response = await api.post(`themes/utilize`, {name});
+            let response = await api.post(`${ENTITY}/utilize`, {name});
 
             if (response.data.statusCode === 1) {
+                dispatch(setRedirect(true));
                 dispatch(getItems());
                 showNotification(response.data.responseMessage, 'success', 'shifted');
             } else if (response.data.statusCode === 2) {
@@ -216,7 +231,7 @@ export const createItem = ({name}) => {
             showNotification('Some error occured', 'danger', 'shifted');
             console.log(error)
         } finally {
-            
+            dispatch(setRedirect(false));
         }
     }
 };
@@ -224,9 +239,10 @@ export const createItem = ({name}) => {
 export const updateItem = ({name, id}) => {
     return async (dispatch) => {
         try{
-            let response = await api.put(`themes/utilize/${id}`, {name});
-            
+            let response = await api.put(`${ENTITY}/utilize/${id}`, {name});
+
             if (response.data.statusCode === 1) {
+                dispatch(setRedirect(true));
                 dispatch(getItems());
                 showNotification(response.data.responseMessage, 'success', 'shifted');
             } else if (response.data.statusCode === 2) {
@@ -244,7 +260,7 @@ export const updateItem = ({name, id}) => {
             showNotification('Some error occured', 'danger', 'shifted');
             console.log(error)
         } finally {
-            
+            dispatch(setRedirect(false));
         }
     }
 };

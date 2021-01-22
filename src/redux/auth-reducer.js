@@ -2,6 +2,7 @@ import {api} from '../api/api';
 import { showNotification } from '../parts/Admin/utils/notifications/notifications';
 
 const SET_USER_DATA = 'SET_USER_DATA';
+const SET_USER_DATA_LOADING = 'SET_USER_DATA_LOADING';
 const SET_LOGIN_FORM_LOADING = 'SET_LOGIN_FORM_LOADING';
 
 const initialState = {
@@ -12,6 +13,7 @@ const initialState = {
     fio: null,
     isAuth: false,
     loginFormLoading: false,
+    userDataLoading: false,
 }
 
 const AutReducer = (state = initialState, action) => {
@@ -20,6 +22,11 @@ const AutReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload
+            }
+        case SET_USER_DATA_LOADING:
+            return {
+                ...state,
+                userDataLoading: action.payload
             }
         case SET_LOGIN_FORM_LOADING:
             return {
@@ -34,8 +41,14 @@ const AutReducer = (state = initialState, action) => {
 export const setUserData = (id, email, username, fio, phone, isAuth) => ({ type: SET_USER_DATA, payload: {id, email, username, fio, phone, isAuth} });
 export const setLoginFormLoading = (val) => ({ type: SET_LOGIN_FORM_LOADING, val });
 
+export const setUserDataLoading = data => ({
+    type: SET_USER_DATA_LOADING,
+    payload: data
+});
+
 export const getUserData = () => {
     return (dispatch, getState) => {
+        dispatch(setUserDataLoading(true));
         api.get(`auth/me`)
             .then((response) => {
                 if (response.data.statusCode === 66) {
@@ -50,7 +63,7 @@ export const getUserData = () => {
             })
             .finally(() => {
                 // dispatch(itemsLoading(false));
-                
+                dispatch(setUserDataLoading(false));
             })
     }
 };

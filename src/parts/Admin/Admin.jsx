@@ -4,11 +4,12 @@ import 'react-notifications-component/dist/theme.css'
 import 'animate.css/animate.min.css';
 import Login from './components/Login/Login';
 import AdminWrapper from './components/AdminWrapper/AdminWrapper';
-import { useDispatch } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { getUserData } from '../../redux/auth-reducer';
+import FullSizePreloader from "./components/common/FullSizePreloader";
 
 const Admin = () => {
-
+    const userDataLoading = useSelector(state => state.auth.userDataLoading);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -17,9 +18,9 @@ const Admin = () => {
 
     return (
         <div className="uk-position-relative">
-            
+            <FullSizePreloader show={userDataLoading}/>
             <Switch>
-                <Route 
+                <Route
                     exact
                     path="/admiral-admin/login"
                     component={Login}

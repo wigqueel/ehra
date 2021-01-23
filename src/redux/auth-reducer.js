@@ -13,7 +13,7 @@ const initialState = {
     fio: null,
     isAuth: false,
     loginFormLoading: false,
-    userDataLoading: false,
+    userDataLoading: true,
 }
 
 const AutReducer = (state = initialState, action) => {

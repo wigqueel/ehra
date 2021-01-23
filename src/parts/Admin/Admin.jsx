@@ -19,6 +19,7 @@ const Admin = () => {
     return (
         <div className="uk-position-relative">
             <FullSizePreloader show={userDataLoading}/>
+            {!userDataLoading &&
             <Switch>
                 <Route
                     exact
@@ -33,7 +34,7 @@ const Admin = () => {
 
                 <Redirect to="/404"/>
             </Switch>
-                    
+            }
         </div>
     )
 }

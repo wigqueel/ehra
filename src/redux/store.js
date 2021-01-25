@@ -4,9 +4,11 @@ import AppReducer from "./app-reducer";
 import AuthReducer from "./auth-reducer";
 import publicReducer from "./public-reducer";
 import themesReducer from "./themes-reducer";
+import languagesReducer from "./languages-reducer";
 
 let reducers = combineReducers({
     themes: themesReducer,
+    languages: languagesReducer,
     app: AppReducer,
     auth: AuthReducer,
     public: publicReducer,

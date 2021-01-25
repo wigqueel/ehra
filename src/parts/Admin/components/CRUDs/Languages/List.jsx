@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getItems, setActive, deleteItem, changeSort, applyFilter } from '../../../../../redux/themes-reducer';
+import { getItems, setActive, deleteItem, changeSort, applyFilter, setDefault } from '../../../../../redux/languages-reducer';
 import Action from '../../common/Action';
 import ActionsWrapper from '../../common/ActionsWrapper';
 import Checkbox from '../../common/Checkbox';
@@ -8,6 +8,7 @@ import Pagination from '../../common/Pagination';
 import CardHeader from '../../styled/CardHeader';
 import CardTitle from '../../styled/CardTitle';
 import CrudTableContainer from '../../styled/CrudTableContainer';
+// import Button from '../../common/AdmiralNavlink';
 import { setBreadcrumbs } from '../../../../../redux/app-reducer';
 
 import DeleteIcon from '../../../../../assets/icons/trash.svg';
@@ -69,12 +70,12 @@ const CrudTableHead = (props) => {
 
 const List = () => {
     
-    const items = useSelector(state => state.themes.items);
-    const totalCount = useSelector(state => state.themes.totalCount);
-    const currentPage = useSelector(state => state.themes.currentPage);
-    const sortField = useSelector(state => state.themes.sortField);
-    const sortType = useSelector(state => state.themes.sortType);
-    const pageSize = useSelector(state => state.themes.pageSize);
+    const items = useSelector(state => state.languages.items);
+    const totalCount = useSelector(state => state.languages.totalCount);
+    const currentPage = useSelector(state => state.languages.currentPage);
+    const sortField = useSelector(state => state.languages.sortField);
+    const sortType = useSelector(state => state.languages.sortType);
+    const pageSize = useSelector(state => state.languages.pageSize);
     
     const dispatch = useDispatch();
 
@@ -88,7 +89,7 @@ const List = () => {
                 link: '/admiral-admin'
             },
             {
-                name: 'Themes',
+                name: 'Languages',
                 link: false
             }
         ]))
@@ -96,6 +97,10 @@ const List = () => {
 
     const setActiveItem = (id) => {
         dispatch(setActive(id));
+    }
+
+    const setDefaultItem = (id) => {
+        dispatch(setDefault(id));
     }
 
     const onClickDeleteItem = (id) => {
@@ -110,7 +115,7 @@ const List = () => {
         dispatch(getItems(pageNumber, pageSize));
     }
 
-    const onClickFilterToggle = (pageNumber) => {
+    const onClickFilterToggle = () => {
         toggleFilter(!isFilterOpen);
     }
 
@@ -131,13 +136,28 @@ const List = () => {
             sortAllow: true
         },
         {
-            code: 'active',
+            code: 'activity',
             label: 'Active',
+            sortAllow: true
+        },
+        {
+            code: 'default_language',
+            label: 'Default',
             sortAllow: true
         },
         {
             code: 'name',
             label: 'Name',
+            sortAllow: true
+        },
+        {
+            code: 'code',
+            label: 'Code',
+            sortAllow: true
+        },
+        {
+            code: 'url_code',
+            label: 'URL',
             sortAllow: true
         },
         {
@@ -185,8 +205,8 @@ const List = () => {
 
             <CardHeader>
                 <div className="uk-flex uk-flex-middle">
-                    <CardTitle className="uk-margin-right">Themes</CardTitle>
-                    <Button as={Link} to="/admiral-admin/themes/create" tooltip="Create theme" onlyIcon><img src={PlusIcon} alt="create"/></Button>
+                    <CardTitle className="uk-margin-right">Languages</CardTitle>
+                    <Button as={Link} to="/admiral-admin/languages/create" tooltip="Create language" onlyIcon><img src={PlusIcon} alt="create"/></Button>
                 </div>
                 <Button variant="secondary" onlyIcon onClick={ onClickFilterToggle } tooltip={isFilterOpen ? 'Close filter': 'Open filter'}><img src={FilterIcon} alt="toggle filter" /></Button>
             </CardHeader>
@@ -200,16 +220,21 @@ const List = () => {
                             <tr key={item.id}>
                                 <td>{item.id}</td>
                                 <td>
-                                    <Checkbox name={'active_' + item.id} id={'checkbox_' + item.id} idNumber={item.id} checked={item.active === '1' ? 'checked' : ''} setActiveItem={setActiveItem}/>
+                                    <Checkbox name={'active_' + item.id} id={'checkbox_active_' + item.id} idNumber={item.id} checked={item.activity === '1' ? 'checked' : ''} setActiveItem={setActiveItem}/>
+                                </td>
+                                <td>
+                                    <Checkbox name={'default_' + item.id} id={'checkbox_default_' + item.id} idNumber={item.id} checked={item.default_language === '1' ? 'checked' : ''} setActiveItem={setDefaultItem}/>
                                 </td>
                                 <td>{item.name}</td>
+                                <td>{item.code}</td>
+                                <td>{item.url_code}</td>
                                 <td>{item.create_date}</td>
                                 <td>{item.update_date}</td>
                                 <td>
                                     <ActionsWrapper>
                                         <Action action={ onClickDeleteItem } itemId={item.id} img={DeleteIcon}/>
-                                        <Action to={`/admiral-admin/themes/view/${item.id}`} itemId={item.id} img={ViewIcon}/>
-                                        <Action to={`/admiral-admin/themes/update/${item.id}`} itemId={item.id} img={PencilIcon}/>
+                                        <Action to={`/admiral-admin/languages/view/${item.id}`} itemId={item.id} img={ViewIcon}/>
+                                        <Action to={`/admiral-admin/languages/update/${item.id}`} itemId={item.id} img={PencilIcon}/>
                                     </ActionsWrapper>
                                 </td>
                             </tr>

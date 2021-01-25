@@ -7,10 +7,17 @@ import NotFound from '../NotFound/NotFound';
 import Dashboard from '../Dashboard/Dashboard';
 import Aside from '../Aside/Aside';
 import Main from '../Main/Main';
-import List from '../CRUDs/Themes/List';
-import View from '../CRUDs/Themes/View';
-import Create from '../CRUDs/Themes/Create';
-import Update from '../CRUDs/Themes/Update';
+
+import ThemesList from '../CRUDs/Themes/List';
+import ThemesView from '../CRUDs/Themes/View';
+import ThemesCreate from '../CRUDs/Themes/Create';
+import ThemesUpdate from '../CRUDs/Themes/Update';
+
+import LanguagesList from '../CRUDs/Languages/List';
+import LanguagesView from '../CRUDs/Languages/View';
+import LanguagesCreate from '../CRUDs/Languages/Create';
+import LanguagesUpdate from '../CRUDs/Languages/Update';
+
 import StyledNotification from '../styled/StyledNotification';
 import { useSelector } from 'react-redux';
 
@@ -39,28 +46,51 @@ const AdminWrapper = () => {
                             <Route
                                 exact
                                 path="/admiral-admin/themes"
-                                component={List}
+                                component={ThemesList}
                             />
 
                             <Route
                                 exact
                                 path="/admiral-admin/themes/view/:id"
-                                component={View}
+                                component={ThemesView}
                             />
 
                             <Route
                                 exact
                                 path="/admiral-admin/themes/update/:id"
-                                component={Update}
+                                component={ThemesUpdate}
                             />
 
                             <Route
                                 exact
                                 path="/admiral-admin/themes/create"
-                                component={Create}
+                                component={ThemesCreate}
                             />
-                            
-                            
+
+
+                            <Route
+                                exact
+                                path="/admiral-admin/languages"
+                                component={LanguagesList}
+                            />
+
+                            <Route
+                                exact
+                                path="/admiral-admin/languages/view/:id"
+                                component={LanguagesView}
+                            />
+
+                            <Route
+                                exact
+                                path="/admiral-admin/languages/update/:id"
+                                component={LanguagesUpdate}
+                            />
+
+                            <Route
+                                exact
+                                path="/admiral-admin/languages/create"
+                                component={LanguagesCreate}
+                            />
                             
                             <Route path="/404" component={NotFound}/>
 

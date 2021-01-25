@@ -26,11 +26,11 @@ const ErrorMessage = styled.div`
     color: red;
 `
 
-const CustomField = ({type, placeholder, label, ...props}) => {
+const CustomField = ({type, placeholder, label, className, ...props}) => {
     return (
         <Field {...props}>
             {({ input, meta }) => (
-                <div>
+                <div className={className}>
                     {label && <label className={`uk-display-block uk-margin-small-bottom`}>{label}</label>}
                     <StyledField {...input} type={type} placeholder={placeholder} className={(meta.error && meta.touched) && `has-error`}/>
                     {meta.error && meta.touched && <ErrorMessage>{meta.error}</ErrorMessage>}

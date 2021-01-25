@@ -1,5 +1,5 @@
 import {api} from '../api/api';
-import { showNotification } from '../parts/Admin/utils/notifications/notifications';
+import {showNotification} from '../parts/Admin/utils/notifications/notifications';
 
 const SET_ITEMS = 'SET_ITEMS';
 const SET_ITEM = 'SET_ITEM';
@@ -84,23 +84,23 @@ const setItem = data => ({
     payload: data
 });
 
-const setFilterString = (filterString) => ({ 
-    type: SET_FILTER_STRING, 
+const setFilterString = (filterString) => ({
+    type: SET_FILTER_STRING,
     payload: filterString
 });
 
-export const setRedirect = (val) => ({ 
-    type: SET_REDIRECT, 
-    payload: val 
+export const setRedirect = (val) => ({
+    type: SET_REDIRECT,
+    payload: val
 });
 
-export const setCurrentPage = (currentPage) => ({ 
-    type: SET_CURRENT_PAGE, 
-    currentPage: currentPage 
+export const setCurrentPage = (currentPage) => ({
+    type: SET_CURRENT_PAGE,
+    currentPage: currentPage
 });
 
-export const changeSortActionCreator = (oldSortField, oldSortType, sortField) => ({ 
-    type: CHANGE_SORT, 
+export const changeSortActionCreator = (oldSortField, oldSortType, sortField) => ({
+    type: CHANGE_SORT,
     oldSortField,
     oldSortType,
     sortField
@@ -108,11 +108,11 @@ export const changeSortActionCreator = (oldSortField, oldSortType, sortField) =>
 
 export const getItems = (currentPage, pageSize) => {
     return async (dispatch, getState) => {
-        
+
         const sortField = getState().themes.sortField;
         const sortType = getState().themes.sortType;
         const filterString = getState().themes.filterString;
-        
+
         if (!currentPage) {
             currentPage = getState().themes.currentPage;
         } else {
@@ -125,18 +125,16 @@ export const getItems = (currentPage, pageSize) => {
 
         try {
             let response = await api.get(`${ENTITY}?per_page=${pageSize}&page_number=${currentPage}&sort_field=${sortField}&sort_type=${sortType}${filterString}`);
-            if (response.data.statusCode === 1) {
-                //
-            } else {
-                showNotification(response.data.responseMessage, 'danger', 'shifted');
-            }
-
             dispatch(setItems(response.data));
-        } catch(error) {
-            showNotification('Some error occured', 'danger', 'shifted');
+        } catch (error) {
+            if (error.response?.data?.message) {
+                showNotification(error.response.data.message, 'danger', 'shifted');
+            } else {
+                showNotification('Some error occurred', 'danger', 'shifted');
+            }
             console.log(error)
         } finally {
-            
+
         }
     }
 };
@@ -150,20 +148,18 @@ export const changeSort = (oldSortField, oldSortType, sortField) => {
 
 export const setActive = (id) => {
     return async (dispatch) => {
-
         try {
-            let response = await api.get(`${ENTITY}/activate/${id}`);
-            if (response.data.statusCode === 1) {
-                showNotification(response.data.responseMessage, 'success', 'shifted');
-                dispatch(getItems());
-            } else {
-                showNotification(response.data.responseMessage, 'danger', 'shifted');
-            }
+            let response = await api.patch(`${ENTITY}/activate/${id}`);
+            showNotification(response.data.message, 'success', 'shifted');
+            dispatch(getItems());
         } catch (error) {
-            showNotification('Some error occured', 'danger', 'shifted');
-            console.log(error)
+            if (error.response?.data?.message) {
+                showNotification(error.response.data.message, 'danger', 'shifted');
+            } else {
+                showNotification('Some error occurred', 'danger', 'shifted');
+            }
         } finally {
-            
+
         }
 
     }
@@ -171,17 +167,16 @@ export const setActive = (id) => {
 
 export const deleteItem = (id) => {
     return async (dispatch) => {
-
         try {
-            let response = await api.get(`${ENTITY}/delete/${id}`);
-            if (response.data.statusCode === 1) {
-                showNotification(response.data.responseMessage, 'success', 'shifted');
-                dispatch(getItems());
+            let response = await api.delete(`${ENTITY}/delete/${id}`);
+            showNotification(response.data.message, 'success', 'shifted');
+            dispatch(getItems());
+        } catch (error) {
+            if (error.response?.data?.message) {
+                showNotification(error.response.data.message, 'danger', 'shifted');
             } else {
-                showNotification(response.data.responseMessage, 'danger', 'shifted');
+                showNotification('Some error occurred', 'danger', 'shifted');
             }
-        } catch(error) {
-            showNotification('Some error occured', 'danger', 'shifted');
             console.log(error)
         } finally {
 
@@ -194,16 +189,16 @@ export const getItemData = (id) => {
     return async (dispatch) => {
         try {
             let response = await api.get(`${ENTITY}/view/${id}`);
-            if (response.data.statusCode === 1) {
-                dispatch(setItem(response.data));
+            dispatch(setItem(response.data));
+        } catch (error) {
+            if (error.response?.data?.message) {
+                showNotification(error.response.data.message, 'danger', 'shifted');
             } else {
-                showNotification(response.data.responseMessage, 'danger', 'shifted');
+                showNotification('Some error occurred', 'danger', 'shifted');
             }
-        } catch(error) {
-            showNotification('Some error occured', 'danger', 'shifted');
             console.log(error)
         } finally {
-            
+
         }
     }
 };
@@ -213,54 +208,49 @@ export const createItem = ({name}) => {
         try {
             let response = await api.post(`${ENTITY}/utilize`, {name});
 
-            if (response.data.statusCode === 1) {
-                dispatch(setRedirect(true));
-                dispatch(getItems());
-                showNotification(response.data.responseMessage, 'success', 'shifted');
-            } else if (response.data.statusCode === 2) {
+            dispatch(getItems());
+            showNotification(response.data.message, 'success', 'shifted');
+        } catch (error) {
+            if (error.response?.data?.message) {
                 let message = '';
-                response.data.responseMessage.map(m => {
+                error.response.data.message.map(m => {
                     message += `${m} `;
                 });
-                
                 showNotification(message, 'danger', 'shifted');
             } else {
-                showNotification(response.data.responseMessage, 'danger', 'shifted');
+                showNotification('Some error occurred', 'danger', 'shifted');
             }
-        } catch(error) {
-            showNotification('Some error occured', 'danger', 'shifted');
+
+            // showNotification(response.data.responseMessage, 'danger', 'shifted');
+            // showNotification('Some error occurred', 'danger', 'shifted');
             console.log(error)
         } finally {
-            dispatch(setRedirect(false));
+
         }
     }
 };
 
 export const updateItem = ({name, id}) => {
     return async (dispatch) => {
-        try{
-            let response = await api.put(`${ENTITY}/utilize/${id}`, {name});
+        try {
+            let response = await api.patch(`${ENTITY}/utilize/${id}`, {name});
 
-            if (response.data.statusCode === 1) {
-                dispatch(setRedirect(true));
-                dispatch(getItems());
-                showNotification(response.data.responseMessage, 'success', 'shifted');
-            } else if (response.data.statusCode === 2) {
+            dispatch(getItems());
+            showNotification(response.data.message, 'success', 'shifted');
+
+        } catch (error) {
+            if (error.response?.data?.message) {
                 let message = '';
-                response.data.responseMessage.map(m => {
+                error.response.data.message.map(m => {
                     message += `${m} `;
                 });
-                
                 showNotification(message, 'danger', 'shifted');
             } else {
-                showNotification(response.data.responseMessage, 'danger', 'shifted');
+                showNotification('Some error occurred', 'danger', 'shifted');
             }
-
-        } catch(error) {
-            showNotification('Some error occured', 'danger', 'shifted');
+            // showNotification(response.data.responseMessage, 'danger', 'shifted');
             console.log(error)
         } finally {
-            dispatch(setRedirect(false));
         }
     }
 };

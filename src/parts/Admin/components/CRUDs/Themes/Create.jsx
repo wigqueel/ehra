@@ -1,16 +1,18 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createItem } from '../../../../../redux/themes-reducer';
+import React, {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {createItem} from '../../../../../redux/themes-reducer';
 import CardHeader from '../../styled/CardHeader';
 import CardTitle from '../../styled/CardTitle';
-import { Redirect, useParams } from 'react-router-dom';
+import {Redirect, useParams} from 'react-router-dom';
 import ButtonsWrapper from '../../common/ButtonsWrapper';
-import Button from '../../common/AdmiralNavlink';
+import Button from '../../common/buttons/Button';
 import SubmitButton from '../../common/formControlls/SubmitButton';
-import { Form, Field } from 'react-final-form'
-import { required } from '../../../utils/validators/validators';
-import { setBreadcrumbs } from '../../../../../redux/app-reducer';
+import {Form, Field} from 'react-final-form'
+import {required} from '../../../utils/validators/validators';
+import {setBreadcrumbs} from '../../../../../redux/app-reducer';
 import CustomField from '../../common/formControlls/CustomField';
+
+import PlusIcon from '../../../../../assets/icons/plus.svg';
 
 const Create = () => {
     const dispatch = useDispatch();
@@ -36,11 +38,11 @@ const Create = () => {
     const onSubmit = values => {
         dispatch(createItem(values));
     }
-    
+
     return (
         <>
-            {redirectToList 
-                ? <Redirect to={'/admiral-admin/themes'} />
+            {redirectToList
+                ? <Redirect to={'/admiral-admin/themes'}/>
                 : <>
                     <CardHeader>
                         <CardTitle>New theme creation</CardTitle>
@@ -56,14 +58,15 @@ const Create = () => {
                             }
                             return errors
                         }}
-                        render={({ handleSubmit, form, submitting, pristine, values }) => (
+                        render={({handleSubmit, form, submitting, pristine, values}) => (
                             <form onSubmit={handleSubmit} className={'uk-margin-top'}>
                                 <div>
-                                    <CustomField name={'name'} type={'text'} placeholder={'Name'} />
+                                    <CustomField name={'name'} type={'text'} placeholder={'Name'}/>
                                 </div>
-                                
+
                                 <ButtonsWrapper>
-                                    <SubmitButton type="submit" disabled={submitting || pristine} className={'primary'}>Create theme</SubmitButton>
+                                    <Button variant="primary" type="submit" disabled={submitting || pristine}>Create
+                                        theme</Button>
                                 </ButtonsWrapper>
                             </form>
                         )}
@@ -72,6 +75,7 @@ const Create = () => {
             }
         </>
     );
-};
+}
+;
 
 export default Create;

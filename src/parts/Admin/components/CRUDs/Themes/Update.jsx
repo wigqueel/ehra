@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setActive, deleteItem, getItemData, updateItem } from '../../../../../redux/themes-reducer';
+import { setActive, deleteItem, getItemData, updateItem, setRedirect } from '../../../../../redux/themes-reducer';
 import CardHeader from '../../styled/CardHeader';
 import CardTitle from '../../styled/CardTitle';
 import { Redirect, useParams } from 'react-router-dom';
 import ButtonsWrapper from '../../common/ButtonsWrapper';
-import Button from '../../common/AdmiralNavlink';
+// import Button from '../../common/AdmiralNavlink';
 import styled from 'styled-components';
 import { Field, Form } from 'react-final-form';
-import SubmitButton from '../../common/formControlls/SubmitButton';
+// import SubmitButton from '../../common/formControlls/SubmitButton';
 import { setBreadcrumbs } from '../../../../../redux/app-reducer';
+import Button from "../../common/buttons/Button";
+import { useHistory } from "react-router-dom";
 
 const StyledField = styled(Field)`
     width: 100%;
@@ -29,15 +31,16 @@ const StyledField = styled(Field)`
 const Update = () => {
     const item = useSelector(state => state.themes.item);
     const redirectToList = useSelector(state => state.themes.redirectToList);
+    let history = useHistory();
 
     const dispatch = useDispatch();
     let {id} = useParams();
     
-    const setActiveTheme = (id) => {
+    const setActiveTheme = () => {
         dispatch(setActive(id));
     }
 
-    const onClickDeleteTheme = (id) => {
+    const onClickDeleteTheme = () => {
         dispatch(deleteItem(id));
     }
 
@@ -93,9 +96,9 @@ const Update = () => {
                                 </div>
                                 
                                 <ButtonsWrapper>
-                                    <SubmitButton type="submit" disabled={submitting || pristine} className={'primary'}>Update theme</SubmitButton>
-                                    <Button type={'primary'} action={setActiveTheme} elementId={id} to={false}>Set active theme</Button>
-                                    <Button type={'danger'} action={onClickDeleteTheme} elementId={id} to={'/admiral-admin/themes'}>Delete theme</Button>
+                                    <Button variant="primary" type="submit" disabled={submitting || pristine}>Update theme</Button>
+                                    <Button variant="primary" type="button" onClick={setActiveTheme}>Set active theme</Button>
+                                    <Button variant="danger" type="button" onClick={onClickDeleteTheme}>Delete theme</Button>
                                 </ButtonsWrapper>
                             </form>
                         )}

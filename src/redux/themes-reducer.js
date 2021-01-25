@@ -211,18 +211,17 @@ export const createItem = ({name}) => {
             dispatch(getItems());
             showNotification(response.data.message, 'success', 'shifted');
         } catch (error) {
-            if (error.response?.data?.message) {
+            if (Array.isArray(error.response?.data?.message)) {
                 let message = '';
                 error.response.data.message.map(m => {
                     message += `${m} `;
                 });
                 showNotification(message, 'danger', 'shifted');
+            } else if (error.response?.data?.message) {
+                showNotification(error.response.data.message, 'danger', 'shifted');
             } else {
                 showNotification('Some error occurred', 'danger', 'shifted');
             }
-
-            // showNotification(response.data.responseMessage, 'danger', 'shifted');
-            // showNotification('Some error occurred', 'danger', 'shifted');
             console.log(error)
         } finally {
 
@@ -239,16 +238,17 @@ export const updateItem = ({name, id}) => {
             showNotification(response.data.message, 'success', 'shifted');
 
         } catch (error) {
-            if (error.response?.data?.message) {
+            if (Array.isArray(error.response?.data?.message)) {
                 let message = '';
                 error.response.data.message.map(m => {
                     message += `${m} `;
                 });
                 showNotification(message, 'danger', 'shifted');
+            } else if (error.response?.data?.message) {
+                showNotification(error.response.data.message, 'danger', 'shifted');
             } else {
                 showNotification('Some error occurred', 'danger', 'shifted');
             }
-            // showNotification(response.data.responseMessage, 'danger', 'shifted');
             console.log(error)
         } finally {
         }

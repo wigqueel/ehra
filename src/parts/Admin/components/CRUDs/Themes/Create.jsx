@@ -54,7 +54,7 @@ const Create = () => {
                 render={({handleSubmit, form, submitting, pristine, values}) => (
                     <form onSubmit={handleSubmit} className={'uk-margin-top'}>
                         <div>
-                            <CustomField name={'name'} type={'text'} placeholder={'Name'}/>
+                            <CustomField label="Name" name={'name'} type={'text'} placeholder={'Name'}/>
                         </div>
 
                         <ButtonsWrapper>

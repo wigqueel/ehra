@@ -12,6 +12,7 @@ import { Field, Form } from 'react-final-form';
 import { setBreadcrumbs } from '../../../../../redux/app-reducer';
 import Button from "../../common/buttons/Button";
 import { useHistory } from "react-router-dom";
+import CustomField from "../../common/formControlls/CustomField";
 
 const StyledField = styled(Field)`
     width: 100%;
@@ -80,13 +81,11 @@ const Update = () => {
                 render={({ handleSubmit, form, submitting, pristine, values }) => (
                     <form onSubmit={handleSubmit} className={'uk-margin-top'}>
                         <div>
-                            {item && <StyledField
+                            {item && <CustomField
+                                label="Name"
                                 name="name"
-                                component="input"
                                 type="text"
                                 placeholder="Theme name"
-                                // initialValue={item.name}
-                                // defaultValue={item.name}
                             />}
                         </div>
 

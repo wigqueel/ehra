@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {setActive, setDefault, getItemData, deleteItem, setRedirect} from '../../../../../redux/languages-reducer';
+import {setActive, setDefault, getItemData, deleteItem} from '../../../../../redux/languages-reducer';
 import CardHeader from '../../styled/CardHeader';
 import CardTitle from '../../styled/CardTitle';
-import {Redirect, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import ButtonsWrapper from '../../common/ButtonsWrapper';
 // import Button from '../../common/AdmiralNavlink';
 import styled from 'styled-components';
@@ -37,7 +37,6 @@ const ViewTable = styled.table`
 
 const View = () => {
         const item = useSelector(state => state.themes.item);
-        const redirectToList = useSelector(state => state.themes.redirectToList);
         const dispatch = useDispatch();
 
         let resultArray = [];
@@ -102,30 +101,25 @@ const View = () => {
 
         return (
             <>
-                {redirectToList
-                    ? <Redirect to={'/admiral-admin/languages'}/>
-                    : <>
-                        <CardHeader>
-                            <CardTitle>Language view: {item && item.name}</CardTitle>
-                        </CardHeader>
+                <CardHeader>
+                    <CardTitle>Language view: {item && item.name}</CardTitle>
+                </CardHeader>
 
-                        {item &&
-                        <ViewTable>
-                            {/* {resultArray}  */}
-                            <p className="uk-margin-top">URL: {item.url_code}</p>
-                            <p>Code: {item.code}</p>
-                            <p>Active: {item.activity === "1" ? "true" : "false"}</p>
-                            <p>Default: {item.default_language === "1" ? "true" : "false"}</p>
-                        </ViewTable>
-                        }
-
-                        <ButtonsWrapper>
-                            <Button variant={'primary'} onClick={setActiveLanguage}>Set active</Button>
-                            <Button variant={'primary'} onClick={setDefaultLanguage}>Set as default</Button>
-                            <Button variant={'danger'} onClick={onClickDeleteLanguage}>Delete</Button>
-                        </ButtonsWrapper>
-                    </>
+                {item &&
+                <ViewTable>
+                    {/* {resultArray}  */}
+                    <p className="uk-margin-top">URL: {item.url_code}</p>
+                    <p>Code: {item.code}</p>
+                    <p>Active: {item.activity === "1" ? "true" : "false"}</p>
+                    <p>Default: {item.default_language === "1" ? "true" : "false"}</p>
+                </ViewTable>
                 }
+
+                <ButtonsWrapper>
+                    <Button variant={'primary'} onClick={setActiveLanguage}>Set active</Button>
+                    <Button variant={'primary'} onClick={setDefaultLanguage}>Set as default</Button>
+                    <Button variant={'danger'} onClick={onClickDeleteLanguage}>Delete</Button>
+                </ButtonsWrapper>
             </>
         );
     }

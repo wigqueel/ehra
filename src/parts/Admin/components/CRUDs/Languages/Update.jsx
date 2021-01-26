@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {setActive, deleteItem, getItemData, updateItem, setDefault} from '../../../../../redux/languages-reducer';
 import CardHeader from '../../styled/CardHeader';
 import CardTitle from '../../styled/CardTitle';
-import { Redirect, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import ButtonsWrapper from '../../common/ButtonsWrapper';
 // import Button from '../../common/AdmiralNavlink';
 import styled from 'styled-components';
@@ -30,7 +30,6 @@ const StyledField = styled(Field)`
 
 const Update = () => {
     const item = useSelector(state => state.languages.item);
-    const redirectToList = useSelector(state => state.languages.redirectToList);
 
     const dispatch = useDispatch();
     let {id} = useParams();
@@ -75,42 +74,37 @@ const Update = () => {
 
     return (
         <>
-            {redirectToList 
-                ? <Redirect to={'/admiral-admin/languages'} />
-                : <>
-                    <CardHeader>
-                        <CardTitle>Language update: {item && item.name}</CardTitle>
-                    </CardHeader>
+            <CardHeader>
+                <CardTitle>Language update: {item && item.name}</CardTitle>
+            </CardHeader>
 
-                    {item &&
-                    <div>
-                        <p className="uk-margin-top">Active: {item.activity === "1" ? "true" : "false"}</p>
-                        <p>Default: {item.default_language === "1" ? "true" : "false"}</p>
-                    </div>
-                    }
-
-                    {item && <Form
-                        onSubmit={onSubmit}
-                        initialValues={{name: item.name, url_code: item.url_code, code: item.code, id: item.id}}
-                        render={({ handleSubmit, form, submitting, pristine, values }) => (
-                            <form onSubmit={handleSubmit} className={'uk-margin-top'}>
-                                <div>
-                                    <CustomField className="uk-margin-small-bottom" name={'name'} type={'text'} placeholder={'Name'}/>
-                                    <CustomField className="uk-margin-small-bottom" name={'url_code'} type={'text'} placeholder={'URL'}/>
-                                    <CustomField className="uk-margin-small-bottom" name={'code'} type={'text'} placeholder={'Code'}/>
-                                </div>
-                                
-                                <ButtonsWrapper>
-                                    <Button type="submit" disabled={submitting || pristine} className={'primary'}>Update language</Button>
-                                    <Button type="button" variant={'primary'} onClick={setActiveLanguage}>Set active</Button>
-                                    <Button type="button" variant={'primary'} onClick={setDefaultLanguage}>Set as default</Button>
-                                    <Button type="button" variant={'danger'} onClick={onClickDeleteLanguage}>Delete</Button>
-                                </ButtonsWrapper>
-                            </form>
-                        )}
-                    />}
-                </>
+            {item &&
+            <div>
+                <p className="uk-margin-top">Active: {item.activity === "1" ? "true" : "false"}</p>
+                <p>Default: {item.default_language === "1" ? "true" : "false"}</p>
+            </div>
             }
+
+            {item && <Form
+                onSubmit={onSubmit}
+                initialValues={{name: item.name, url_code: item.url_code, code: item.code, id: item.id}}
+                render={({ handleSubmit, form, submitting, pristine, values }) => (
+                    <form onSubmit={handleSubmit} className={'uk-margin-top'}>
+                        <div>
+                            <CustomField className="uk-margin-small-bottom" name={'name'} type={'text'} placeholder={'Name'}/>
+                            <CustomField className="uk-margin-small-bottom" name={'url_code'} type={'text'} placeholder={'URL'}/>
+                            <CustomField className="uk-margin-small-bottom" name={'code'} type={'text'} placeholder={'Code'}/>
+                        </div>
+
+                        <ButtonsWrapper>
+                            <Button type="submit" disabled={submitting || pristine} className={'primary'}>Update language</Button>
+                            <Button type="button" variant={'primary'} onClick={setActiveLanguage}>Set active</Button>
+                            <Button type="button" variant={'primary'} onClick={setDefaultLanguage}>Set as default</Button>
+                            <Button type="button" variant={'danger'} onClick={onClickDeleteLanguage}>Delete</Button>
+                        </ButtonsWrapper>
+                    </form>
+                )}
+            />}
         </>
     );
 };

@@ -4,6 +4,7 @@ import history from '../history'
 
 const SET_ITEMS = 'SET_ITEMS';
 const SET_ITEM = 'SET_ITEM';
+const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 const CHANGE_SORT = 'CHANGE_SORT';
 const SET_FILTER_STRING = 'SET_FILTER_STRING';
@@ -16,7 +17,7 @@ const initialState = {
     totalCount: null,
     item: null,
     currentPage: 1,
-    pageSize: 8,
+    pageSize: '8',
     sortField: 'id',
     sortType: 'sort_desc',
     filterString: '',
@@ -63,6 +64,11 @@ const themesReducer = (state = initialState, action) => {
                 ...state,
                 filterString: action.payload
             }
+        case SET_PAGE_SIZE:
+            return {
+                ...state,
+                pageSize: action.payload
+            }
         default:
             return state;
     }
@@ -75,6 +81,11 @@ const setItems = data => ({
 
 const setItem = data => ({
     type: SET_ITEM,
+    payload: data
+});
+
+export const setPageSize = data => ({
+    type: SET_PAGE_SIZE,
     payload: data
 });
 

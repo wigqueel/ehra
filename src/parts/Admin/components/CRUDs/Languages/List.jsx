@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getItems, setActive, deleteItem, changeSort, applyFilter, setDefault } from '../../../../../redux/languages-reducer';
+import { getItems, setActive, deleteItem, changeSort, applyFilter, setDefault, setPageSize } from '../../../../../redux/languages-reducer';
 import Action from '../../common/Action';
 import ActionsWrapper from '../../common/ActionsWrapper';
 import Checkbox from '../../common/Checkbox';
@@ -128,6 +128,11 @@ const List = () => {
         form.reset();
     }
 
+    const handlePageSizeChange = (value) => {
+        dispatch(setPageSize(value));
+        dispatch(getItems());
+    }
+
     const fields = [
         {
             code: 'id',
@@ -242,7 +247,16 @@ const List = () => {
                 </tbody>
             </CrudTableContainer>}
 
-            <Pagination totalItemsCount={totalCount} pageSize={pageSize} currentPage={currentPage} onPageChange={onPageChange} />
+            <div className="uk-margin-top">
+                <Pagination
+                    className="uk-margin-right"
+                    handlePageSizeChange={handlePageSizeChange}
+                    totalItemsCount={totalCount}
+                    pageSize={pageSize}
+                    currentPage={currentPage}
+                    onPageChange={onPageChange}
+                />
+            </div>
         </>
     );
 };

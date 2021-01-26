@@ -4,10 +4,10 @@ import history from "../history";
 
 const SET_ITEMS = 'SET_ITEMS';
 const SET_ITEM = 'SET_ITEM';
+const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 const CHANGE_SORT = 'CHANGE_SORT';
 const SET_FILTER_STRING = 'SET_FILTER_STRING';
-const SET_REDIRECT = 'SET_REDIRECT';
 
 const ENTITY = 'languages';
 
@@ -17,11 +17,10 @@ const initialState = {
     totalCount: null,
     item: null,
     currentPage: 1,
-    pageSize: 8,
+    pageSize: '8',
     sortField: 'id',
     sortType: 'sort_desc',
     filterString: '',
-    redirectToList: false,
 }
 
 const languagesReducer = (state = initialState, action) => {
@@ -65,10 +64,10 @@ const languagesReducer = (state = initialState, action) => {
                 ...state,
                 filterString: action.payload
             }
-        case SET_REDIRECT:
+        case SET_PAGE_SIZE:
             return {
                 ...state,
-                redirectToList: action.payload
+                pageSize: action.payload
             }
         default:
             return state;
@@ -85,14 +84,14 @@ const setItem = data => ({
     payload: data
 });
 
+export const setPageSize = data => ({
+    type: SET_PAGE_SIZE,
+    payload: data
+});
+
 const setFilterString = (filterString) => ({ 
     type: SET_FILTER_STRING, 
     payload: filterString
-});
-
-export const setRedirect = (val) => ({ 
-    type: SET_REDIRECT, 
-    payload: val 
 });
 
 export const setCurrentPage = (currentPage) => ({ 
@@ -252,7 +251,7 @@ export const createItem = (item) => {
             }
             console.log(error)
         } finally {
-            dispatch(setRedirect(false));
+
         }
     }
 };

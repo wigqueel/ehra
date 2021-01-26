@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getItems, setActive, deleteItem, changeSort, applyFilter, setDefault, setPageSize } from '../../../../../redux/languages-reducer';
+import { getItems, setActive, deleteItem, changeSort, applyFilter, setDefault, updatePageSize } from '../../../../../redux/languages-reducer';
 import Action from '../../common/Action';
 import ActionsWrapper from '../../common/ActionsWrapper';
 import Checkbox from '../../common/Checkbox';
@@ -129,7 +129,7 @@ const List = () => {
     }
 
     const handlePageSizeChange = (value) => {
-        dispatch(setPageSize(value));
+        dispatch(updatePageSize(value));
         dispatch(getItems());
     }
 

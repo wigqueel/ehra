@@ -6,7 +6,7 @@ import {
     deleteItem,
     changeSort,
     applyFilter,
-    setPageSize
+    updatePageSize
 } from '../../../../../redux/themes-reducer';
 import Action from '../../common/Action';
 import ActionsWrapper from '../../common/ActionsWrapper';
@@ -131,7 +131,7 @@ const List = () => {
     }
 
     const handlePageSizeChange = (value) => {
-        dispatch(setPageSize(value));
+        dispatch(updatePageSize(value));
         dispatch(getItems());
     }
 

@@ -84,7 +84,7 @@ const setItem = data => ({
     payload: data
 });
 
-export const setPageSize = data => ({
+const setPageSize = data => ({
     type: SET_PAGE_SIZE,
     payload: data
 });
@@ -105,6 +105,13 @@ export const changeSortActionCreator = (oldSortField, oldSortType, sortField) =>
     oldSortType,
     sortField
 });
+
+export const updatePageSize = (pageSize) => {
+    return async (dispatch, getState) => {
+        dispatch(setPageSize(pageSize))
+        dispatch(setCurrentPage(1))
+    }
+};
 
 export const getItems = (currentPage, pageSize) => {
     return async (dispatch, getState) => {

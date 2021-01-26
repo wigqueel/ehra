@@ -1,11 +1,10 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {setActive, getItemData, deleteItem, setRedirect} from '../../../../../redux/themes-reducer';
+import {setActive, getItemData, deleteItem} from '../../../../../redux/themes-reducer';
 import CardHeader from '../../styled/CardHeader';
 import CardTitle from '../../styled/CardTitle';
 import {Redirect, useParams} from 'react-router-dom';
 import ButtonsWrapper from '../../common/ButtonsWrapper';
-// import Button from '../../common/AdmiralNavlink';
 import styled from 'styled-components';
 import {setBreadcrumbs} from '../../../../../redux/app-reducer';
 import Button from "../../common/buttons/Button";
@@ -37,7 +36,6 @@ const ViewTable = styled.table`
 
 const View = () => {
     const item = useSelector(state => state.themes.item);
-    const redirectToList = useSelector(state => state.themes.redirectToList);
     const dispatch = useDispatch();
 
     let resultArray = [];
@@ -98,23 +96,20 @@ const View = () => {
 
     return (
         <>
-            {redirectToList
-                ? <Redirect to={'/admiral-admin/themes'}/>
-                : <>
-                    <CardHeader>
-                        <CardTitle>Theme view: {item && item.name}</CardTitle>
-                    </CardHeader>
+            <CardHeader>
+                <CardTitle>Theme view: {item && item.name}</CardTitle>
+            </CardHeader>
 
-                    <ViewTable>
-                        {/* {resultArray}  */}
-                    </ViewTable>
-
-                    <ButtonsWrapper>
-                        <Button variant={'primary'} onClick={setActiveTheme}>Set active theme</Button>
-                        <Button variant={'danger'} onClick={onClickDeleteTheme}>Delete theme</Button>
-                    </ButtonsWrapper>
-                </>
+            {item &&
+            <div>
+                <p className='uk-margin-top'>Active: {item.activity === "1" ? "true" : "false"}</p>
+            </div>
             }
+
+            <ButtonsWrapper>
+                <Button variant={'primary'} onClick={setActiveTheme}>Set active theme</Button>
+                <Button variant={'danger'} onClick={onClickDeleteTheme}>Delete theme</Button>
+            </ButtonsWrapper>
         </>
     );
 }

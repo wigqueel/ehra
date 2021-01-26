@@ -8,7 +8,6 @@ import Pagination from '../../common/Pagination';
 import CardHeader from '../../styled/CardHeader';
 import CardTitle from '../../styled/CardTitle';
 import CrudTableContainer from '../../styled/CrudTableContainer';
-// import Button from '../../common/AdmiralNavlink';
 import { setBreadcrumbs } from '../../../../../redux/app-reducer';
 
 import DeleteIcon from '../../../../../assets/icons/trash.svg';

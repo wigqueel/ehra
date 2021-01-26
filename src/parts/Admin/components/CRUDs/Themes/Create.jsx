@@ -3,7 +3,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {createItem} from '../../../../../redux/themes-reducer';
 import CardHeader from '../../styled/CardHeader';
 import CardTitle from '../../styled/CardTitle';
-import {Redirect, useParams} from 'react-router-dom';
 import ButtonsWrapper from '../../common/ButtonsWrapper';
 import Button from '../../common/buttons/Button';
 import SubmitButton from '../../common/formControlls/SubmitButton';
@@ -12,11 +11,8 @@ import {required} from '../../../utils/validators/validators';
 import {setBreadcrumbs} from '../../../../../redux/app-reducer';
 import CustomField from '../../common/formControlls/CustomField';
 
-import PlusIcon from '../../../../../assets/icons/plus.svg';
-
 const Create = () => {
     const dispatch = useDispatch();
-    const redirectToList = useSelector(state => state.themes.redirectToList);
 
     useEffect(() => {
         dispatch(setBreadcrumbs([
@@ -41,38 +37,33 @@ const Create = () => {
 
     return (
         <>
-            {redirectToList
-                ? <Redirect to={'/admiral-admin/themes'}/>
-                : <>
-                    <CardHeader>
-                        <CardTitle>New theme creation</CardTitle>
-                    </CardHeader>
+            <CardHeader>
+                <CardTitle>New theme creation</CardTitle>
+            </CardHeader>
 
-                    <Form
-                        onSubmit={onSubmit}
-                        initialValues={''}
-                        validate={values => {
-                            const errors = {}
-                            if (!values.name) {
-                                errors.name = 'This is required field'
-                            }
-                            return errors
-                        }}
-                        render={({handleSubmit, form, submitting, pristine, values}) => (
-                            <form onSubmit={handleSubmit} className={'uk-margin-top'}>
-                                <div>
-                                    <CustomField name={'name'} type={'text'} placeholder={'Name'}/>
-                                </div>
+            <Form
+                onSubmit={onSubmit}
+                initialValues={''}
+                validate={values => {
+                    const errors = {}
+                    if (!values.name) {
+                        errors.name = 'This is required field'
+                    }
+                    return errors
+                }}
+                render={({handleSubmit, form, submitting, pristine, values}) => (
+                    <form onSubmit={handleSubmit} className={'uk-margin-top'}>
+                        <div>
+                            <CustomField name={'name'} type={'text'} placeholder={'Name'}/>
+                        </div>
 
-                                <ButtonsWrapper>
-                                    <Button variant="primary" type="submit" disabled={submitting || pristine}>Create
-                                        theme</Button>
-                                </ButtonsWrapper>
-                            </form>
-                        )}
-                    />
-                </>
-            }
+                        <ButtonsWrapper>
+                            <Button variant="primary" type="submit" disabled={submitting || pristine}>Create
+                                theme</Button>
+                        </ButtonsWrapper>
+                    </form>
+                )}
+            />
         </>
     );
 }

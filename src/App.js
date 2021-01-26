@@ -1,6 +1,8 @@
 import './App.css';
 import React, { Suspense } from 'react';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {Router, Route, Switch} from 'react-router-dom';
+import history from './history';
+
 
 const Admin = React.lazy(() => import('./parts/Admin/Admin'));
 const Public = React.lazy(() => import('./parts/Public/Public'));
@@ -9,7 +11,7 @@ const Public = React.lazy(() => import('./parts/Public/Public'));
 const App = () => {
     return (
         <>
-            <BrowserRouter>
+            <Router history={history}>
                 <Suspense fallback={<div>Загрузка...</div>}>
                     <Switch>
                         <Route
@@ -27,7 +29,7 @@ const App = () => {
                         />
                     </Switch>
                 </Suspense>
-            </BrowserRouter>
+            </Router>
         </>
     );
 }

@@ -1,5 +1,6 @@
 import {api} from '../api/api';
 import { showNotification } from '../parts/Admin/utils/notifications/notifications';
+import history from "../history";
 
 const SET_ITEMS = 'SET_ITEMS';
 const SET_ITEM = 'SET_ITEM';
@@ -154,6 +155,7 @@ export const setActive = (id) => {
             showNotification(response.data.message, 'success', 'shifted');
             dispatch(getItems());
             dispatch(getItemData(id));
+            history.push('/admiral-admin/languages');
         } catch (error) {
             if (error.response?.data?.message) {
                 showNotification(error.response.data.message, 'danger', 'shifted');
@@ -175,6 +177,7 @@ export const setDefault = (id) => {
             showNotification(response.data.message, 'success', 'shifted');
             dispatch(getItems());
             dispatch(getItemData(id));
+            history.push('/admiral-admin/languages');
         } catch (error) {
             if (error.response?.data?.message) {
                 showNotification(error.response.data.message, 'danger', 'shifted');
@@ -195,6 +198,7 @@ export const deleteItem = (id) => {
             let response = await api.get(`${ENTITY}/delete/${id}`);
             showNotification(response.data.message, 'success', 'shifted');
             dispatch(getItems());
+            history.push('/admiral-admin/languages');
         } catch(error) {
             if (error.response?.data?.message) {
                 showNotification(error.response.data.message, 'danger', 'shifted');
@@ -233,6 +237,7 @@ export const createItem = (item) => {
             let response = await api.post(`${ENTITY}/utilize`, item);
             dispatch(getItems());
             showNotification(response.data.message, 'success', 'shifted');
+            history.push('/admiral-admin/languages');
         } catch(error) {
             if (Array.isArray(error.response?.data?.message)) {
                 let message = '';
@@ -259,7 +264,7 @@ export const updateItem = ({id, ...item}) => {
 
             dispatch(getItems());
             showNotification(response.data.message, 'success', 'shifted');
-
+            history.push('/admiral-admin/languages');
         } catch (error) {
             if (Array.isArray(error.response?.data?.message)) {
                 let message = '';

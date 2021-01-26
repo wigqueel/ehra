@@ -1,12 +1,12 @@
 import {api} from '../api/api';
 import {showNotification} from '../parts/Admin/utils/notifications/notifications';
+import history from '../history'
 
 const SET_ITEMS = 'SET_ITEMS';
 const SET_ITEM = 'SET_ITEM';
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 const CHANGE_SORT = 'CHANGE_SORT';
 const SET_FILTER_STRING = 'SET_FILTER_STRING';
-const SET_REDIRECT = 'SET_REDIRECT';
 
 const ENTITY = 'themes';
 
@@ -20,7 +20,6 @@ const initialState = {
     sortField: 'id',
     sortType: 'sort_desc',
     filterString: '',
-    redirectToList: false,
 }
 
 const themesReducer = (state = initialState, action) => {
@@ -64,11 +63,6 @@ const themesReducer = (state = initialState, action) => {
                 ...state,
                 filterString: action.payload
             }
-        case SET_REDIRECT:
-            return {
-                ...state,
-                redirectToList: action.payload
-            }
         default:
             return state;
     }
@@ -87,11 +81,6 @@ const setItem = data => ({
 const setFilterString = (filterString) => ({
     type: SET_FILTER_STRING,
     payload: filterString
-});
-
-export const setRedirect = (val) => ({
-    type: SET_REDIRECT,
-    payload: val
 });
 
 export const setCurrentPage = (currentPage) => ({
@@ -152,6 +141,8 @@ export const setActive = (id) => {
             let response = await api.patch(`${ENTITY}/activate/${id}`);
             showNotification(response.data.message, 'success', 'shifted');
             dispatch(getItems());
+            dispatch(getItemData(id));
+            history.push('/admiral-admin/themes');
         } catch (error) {
             if (error.response?.data?.message) {
                 showNotification(error.response.data.message, 'danger', 'shifted');
@@ -171,6 +162,7 @@ export const deleteItem = (id) => {
             let response = await api.delete(`${ENTITY}/delete/${id}`);
             showNotification(response.data.message, 'success', 'shifted');
             dispatch(getItems());
+            history.push('/admiral-admin/themes');
         } catch (error) {
             if (error.response?.data?.message) {
                 showNotification(error.response.data.message, 'danger', 'shifted');
@@ -210,6 +202,7 @@ export const createItem = ({name}) => {
 
             dispatch(getItems());
             showNotification(response.data.message, 'success', 'shifted');
+            history.push('/admiral-admin/themes');
         } catch (error) {
             if (Array.isArray(error.response?.data?.message)) {
                 let message = '';
@@ -235,8 +228,9 @@ export const updateItem = ({name, id}) => {
             let response = await api.patch(`${ENTITY}/utilize/${id}`, {name});
 
             dispatch(getItems());
+            dispatch(getItemData(id));
             showNotification(response.data.message, 'success', 'shifted');
-
+            history.push('/admiral-admin/themes');
         } catch (error) {
             if (Array.isArray(error.response?.data?.message)) {
                 let message = '';

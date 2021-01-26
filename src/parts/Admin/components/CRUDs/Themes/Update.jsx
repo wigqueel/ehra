@@ -30,8 +30,6 @@ const StyledField = styled(Field)`
 
 const Update = () => {
     const item = useSelector(state => state.themes.item);
-    const redirectToList = useSelector(state => state.themes.redirectToList);
-    let history = useHistory();
 
     const dispatch = useDispatch();
     let {id} = useParams();
@@ -72,39 +70,34 @@ const Update = () => {
 
     return (
         <>
-            {redirectToList 
-                ? <Redirect to={'/admiral-admin/themes'} />
-                : <>
-                    <CardHeader>
-                        <CardTitle>Theme update: {item && item.name}</CardTitle>
-                    </CardHeader>
+            <CardHeader>
+                <CardTitle>Theme update: {item && item.name}</CardTitle>
+            </CardHeader>
 
-                    {item && <Form
-                        onSubmit={onSubmit}
-                        initialValues={{name: item.name, id: item.id}}
-                        render={({ handleSubmit, form, submitting, pristine, values }) => (
-                            <form onSubmit={handleSubmit} className={'uk-margin-top'}>
-                                <div>
-                                    {item && <StyledField
-                                        name="name"
-                                        component="input"
-                                        type="text"
-                                        placeholder="Theme name"
-                                        // initialValue={item.name}
-                                        // defaultValue={item.name}
-                                    />}
-                                </div>
-                                
-                                <ButtonsWrapper>
-                                    <Button variant="primary" type="submit" disabled={submitting || pristine}>Update theme</Button>
-                                    <Button variant="primary" type="button" onClick={setActiveTheme}>Set active theme</Button>
-                                    <Button variant="danger" type="button" onClick={onClickDeleteTheme}>Delete theme</Button>
-                                </ButtonsWrapper>
-                            </form>
-                        )}
-                    />}
-                </>
-            }
+            {item && <Form
+                onSubmit={onSubmit}
+                initialValues={{name: item.name, id: item.id}}
+                render={({ handleSubmit, form, submitting, pristine, values }) => (
+                    <form onSubmit={handleSubmit} className={'uk-margin-top'}>
+                        <div>
+                            {item && <StyledField
+                                name="name"
+                                component="input"
+                                type="text"
+                                placeholder="Theme name"
+                                // initialValue={item.name}
+                                // defaultValue={item.name}
+                            />}
+                        </div>
+
+                        <ButtonsWrapper>
+                            <Button variant="primary" type="submit" disabled={submitting || pristine}>Update theme</Button>
+                            <Button variant="primary" type="button" onClick={setActiveTheme}>Set active theme</Button>
+                            <Button variant="danger" type="button" onClick={onClickDeleteTheme}>Delete theme</Button>
+                        </ButtonsWrapper>
+                    </form>
+                )}
+            />}
         </>
     );
 };

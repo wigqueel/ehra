@@ -14,6 +14,7 @@ const Header = () => {
 					<li><NavLink to="/admiral-admin">Dashboard</NavLink></li>
 					<li><NavLink to="/admiral-admin/themes">Themes</NavLink></li>
 					<li><NavLink to="/admiral-admin/languages">Languages</NavLink></li>
+					<li><NavLink to="/admiral-admin/pages">Pages</NavLink></li>
 				</ul>
             </div>
 

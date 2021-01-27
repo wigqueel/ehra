@@ -20,6 +20,7 @@ import LanguagesUpdate from '../CRUDs/Languages/Update';
 
 import StyledNotification from '../styled/StyledNotification';
 import { useSelector } from 'react-redux';
+import Pages from "../CRUDs/Pages/Pages";
 
 
 const AdminWrapper = () => {
@@ -90,6 +91,12 @@ const AdminWrapper = () => {
                                 exact
                                 path="/admiral-admin/languages/create"
                                 component={LanguagesCreate}
+                            />
+
+                            <Route
+                                exact
+                                path="/admiral-admin/pages"
+                                component={Pages}
                             />
                             
                             <Route path="/404" component={NotFound}/>

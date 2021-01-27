@@ -224,10 +224,10 @@ const List = () => {
                             <tr key={item.id}>
                                 <td>{item.id}</td>
                                 <td>
-                                    <Checkbox name={'active_' + item.id} id={'checkbox_active_' + item.id} idNumber={item.id} checked={item.activity === '1' ? 'checked' : ''} setActiveItem={setActiveItem}/>
+                                    <Checkbox name={'active_' + item.id} id={'checkbox_active_' + item.id} idNumber={item.id} checked={item.active === '1' ? 'checked' : ''} setActiveItem={setActiveItem}/>
                                 </td>
                                 <td>
-                                    <Checkbox name={'default_' + item.id} id={'checkbox_default_' + item.id} idNumber={item.id} checked={item.default_language === '1' ? 'checked' : ''} setActiveItem={setDefaultItem}/>
+                                    <Checkbox name={'default_' + item.id} id={'checkbox_default_' + item.id} idNumber={item.id} checked={item.default_item === '1' ? 'checked' : ''} setActiveItem={setDefaultItem}/>
                                 </td>
                                 <td>{item.name}</td>
                                 <td>{item.code}</td>

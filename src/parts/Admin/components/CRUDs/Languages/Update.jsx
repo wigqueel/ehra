@@ -80,8 +80,8 @@ const Update = () => {
 
             {item &&
             <div>
-                <p className="uk-margin-top">Active: {item.activity === "1" ? "true" : "false"}</p>
-                <p>Default: {item.default_language === "1" ? "true" : "false"}</p>
+                <p className="uk-margin-top">Active: {item.active === "1" ? "true" : "false"}</p>
+                <p>Default: {item.default_item === "1" ? "true" : "false"}</p>
             </div>
             }
 

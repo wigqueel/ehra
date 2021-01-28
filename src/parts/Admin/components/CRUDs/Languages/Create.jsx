@@ -56,9 +56,9 @@ const Create = () => {
                     render={({handleSubmit, form, submitting, pristine, values}) => (
                         <form onSubmit={handleSubmit} className={'uk-margin-top'}>
                             <div>
-                                <CustomField className="uk-margin-small-bottom" name={'name'} type={'text'} placeholder={'Name'}/>
-                                <CustomField className="uk-margin-small-bottom" name={'url_code'} type={'text'} placeholder={'URL'}/>
-                                <CustomField className="uk-margin-small-bottom" name={'code'} type={'text'} placeholder={'Code'}/>
+                                <CustomField label="Name" className="uk-margin-small-bottom" name={'name'} type={'text'} placeholder={'Name'}/>
+                                <CustomField label="URL" className="uk-margin-small-bottom" name={'url_code'} type={'text'} placeholder={'URL'}/>
+                                <CustomField label="Code" className="uk-margin-small-bottom" name={'code'} type={'text'} placeholder={'Code'}/>
                             </div>
 
                             <ButtonsWrapper>

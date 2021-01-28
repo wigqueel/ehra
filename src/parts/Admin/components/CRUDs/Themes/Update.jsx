@@ -75,6 +75,12 @@ const Update = () => {
                 <CardTitle>Theme update: {item && item.name}</CardTitle>
             </CardHeader>
 
+            {item &&
+            <div>
+                <p className='uk-margin-top'>Active: {item.active === "1" ? "true" : "false"}</p>
+            </div>
+            }
+
             {item && <Form
                 onSubmit={onSubmit}
                 initialValues={{name: item.name, id: item.id}}

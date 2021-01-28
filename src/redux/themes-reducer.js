@@ -156,7 +156,7 @@ export const changeSort = (oldSortField, oldSortType, sortField) => {
 export const setActive = (id) => {
     return async (dispatch) => {
         try {
-            let response = await api.patch(`${ENTITY}/activate/${id}`);
+            let response = await api.patch(`${ENTITY}/set-active/${id}`);
             showNotification(response.data.message, 'success', 'shifted');
             dispatch(getItems());
             dispatch(getItemData(id));

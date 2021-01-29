@@ -102,7 +102,7 @@ const View = () => {
 
             {item &&
             <div>
-                <p className='uk-margin-top'>Active: {item.activity === "1" ? "true" : "false"}</p>
+                <p className='uk-margin-top'>Active: {item.active === "1" ? "true" : "false"}</p>
             </div>
             }
 

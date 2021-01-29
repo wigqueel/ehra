@@ -11,7 +11,7 @@ import CrudTableContainer from '../../styled/CrudTableContainer';
 import { setBreadcrumbs } from '../../../../../redux/app-reducer';
 
 import DeleteIcon from '../../../../../assets/icons/trash.svg';
-import ViewIcon from '../../../../../assets/icons/view.svg';
+import EyeIcon from '../../../../../assets/icons/eye.svg';
 import PlusIcon from '../../../../../assets/icons/plus.svg';
 import PencilIcon from '../../../../../assets/icons/pencil.svg';
 import FilterIcon from '../../../../../assets/icons/filter.svg';
@@ -237,7 +237,7 @@ const List = () => {
                                 <td>
                                     <ActionsWrapper>
                                         <Action action={ onClickDeleteItem } itemId={item.id} img={DeleteIcon}/>
-                                        <Action to={`/admiral-admin/languages/view/${item.id}`} itemId={item.id} img={ViewIcon}/>
+                                        <Action to={`/admiral-admin/languages/view/${item.id}`} itemId={item.id} img={EyeIcon}/>
                                         <Action to={`/admiral-admin/languages/update/${item.id}`} itemId={item.id} img={PencilIcon}/>
                                     </ActionsWrapper>
                                 </td>

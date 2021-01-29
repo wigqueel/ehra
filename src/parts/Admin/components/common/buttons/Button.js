@@ -3,10 +3,13 @@ import PlusIcon from "../../../../../assets/icons/plus.svg";
 import ButtonsWrapper from "../ButtonsWrapper";
 import React from "react";
 
+//$iconOnly why? ->
+//https://styled-components.com/docs/api#transient-props
+
 // <Button variant="primary">Primary</Button>
 // <Button variant="danger">Danger</Button>
 // <Button variant="secondary">Secondary</Button>
-// <Button onlyIcon><img src={PlusIcon} alt=""/></Button>
+// <Button $iconOnly><img src={PlusIcon} alt=""/></Button>
 // <Button small>small</Button>
 
 const handleVariant = variant => {
@@ -106,7 +109,7 @@ const Button = styled.button`
     }
   }
 
-  ${(props) => props?.onlyIcon && css`
+  ${(props) => props?.$iconOnly && css`
     width: 40px;
     height: 40px;
     padding: 0;

@@ -200,10 +200,10 @@ const List = () => {
             <CardHeader>
                 <div className="uk-flex uk-flex-middle">
                     <CardTitle className="uk-margin-right">Themes</CardTitle>
-                    <Button as={Link} to="/admiral-admin/themes/create" tooltip="Create theme" onlyIcon><img
+                    <Button as={Link} to="/admiral-admin/themes/create" tooltip="Create theme" $iconOnly><img
                         src={PlusIcon} alt="create"/></Button>
                 </div>
-                <Button variant="secondary" onlyIcon onClick={onClickFilterToggle}
+                <Button variant="secondary" $iconOnly onClick={onClickFilterToggle}
                         tooltip={isFilterOpen ? 'Close filter' : 'Open filter'}><img src={FilterIcon}
                                                                                      alt="toggle filter"/></Button>
             </CardHeader>
@@ -225,10 +225,10 @@ const List = () => {
                             <td>{item.update_date}</td>
                             <td>
                                 <ActionsWrapper>
-                                    <Action action={onClickDeleteItem} itemId={item.id} img={DeleteIcon}/>
-                                    <Action to={`/admiral-admin/themes/view/${item.id}`} itemId={item.id}
+                                    <Action onClick={() => onClickDeleteItem(item.id)} img={DeleteIcon}/>
+                                    <Action as={Link} to={`/admiral-admin/themes/view/${item.id}`}
                                             img={EyeIcon}/>
-                                    <Action to={`/admiral-admin/themes/update/${item.id}`} itemId={item.id}
+                                    <Action as={Link} to={`/admiral-admin/themes/update/${item.id}`}
                                             img={PencilIcon}/>
                                 </ActionsWrapper>
                             </td>

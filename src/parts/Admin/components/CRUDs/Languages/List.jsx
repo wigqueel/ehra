@@ -210,9 +210,9 @@ const List = () => {
             <CardHeader>
                 <div className="uk-flex uk-flex-middle">
                     <CardTitle className="uk-margin-right">Languages</CardTitle>
-                    <Button as={Link} to="/admiral-admin/languages/create" tooltip="Create language" onlyIcon><img src={PlusIcon} alt="create"/></Button>
+                    <Button as={Link} to="/admiral-admin/languages/create" tooltip="Create language" $iconOnly><img src={PlusIcon} alt="create"/></Button>
                 </div>
-                <Button variant="secondary" onlyIcon onClick={ onClickFilterToggle } tooltip={isFilterOpen ? 'Close filter': 'Open filter'}><img src={FilterIcon} alt="toggle filter" /></Button>
+                <Button variant="secondary" $iconOnly onClick={ onClickFilterToggle } tooltip={isFilterOpen ? 'Close filter': 'Open filter'}><img src={FilterIcon} alt="toggle filter" /></Button>
             </CardHeader>
 
             {items && <CrudTableContainer>
@@ -236,9 +236,11 @@ const List = () => {
                                 <td>{item.update_date}</td>
                                 <td>
                                     <ActionsWrapper>
-                                        <Action action={ onClickDeleteItem } itemId={item.id} img={DeleteIcon}/>
-                                        <Action to={`/admiral-admin/languages/view/${item.id}`} itemId={item.id} img={EyeIcon}/>
-                                        <Action to={`/admiral-admin/languages/update/${item.id}`} itemId={item.id} img={PencilIcon}/>
+                                        <Action onClick={() => onClickDeleteItem(item.id)} img={DeleteIcon}/>
+                                        <Action as={Link} to={`/admiral-admin/languages/view/${item.id}`}
+                                                img={EyeIcon}/>
+                                        <Action as={Link} to={`/admiral-admin/languages/update/${item.id}`}
+                                                img={PencilIcon}/>
                                     </ActionsWrapper>
                                 </td>
                             </tr>

@@ -106,13 +106,12 @@ const View = () => {
                 </CardHeader>
 
                 {item &&
-                <ViewTable>
-                    {/* {resultArray}  */}
+                <div>
                     <p className="uk-margin-top">URL: {item.url_code}</p>
                     <p>Code: {item.code}</p>
                     <p>Active: {item.active === "1" ? "true" : "false"}</p>
                     <p>Default: {item.default_item === "1" ? "true" : "false"}</p>
-                </ViewTable>
+                </div>
                 }
 
                 <ButtonsWrapper>

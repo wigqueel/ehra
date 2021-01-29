@@ -11,7 +11,7 @@ const Breadcrumbs = () => {
     return (
         <BreadcrumbsContainer>
             <ul className="breadcrumb">
-                {breadcrumbsItem.map(item => <li>
+                {breadcrumbsItem.map((item, i) => <li key={i}>
                     {item.link ? <NavLink to={item.link}>{item.name}</NavLink> : item.name}
                 </li>)}
             </ul>

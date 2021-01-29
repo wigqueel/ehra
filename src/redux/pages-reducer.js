@@ -20,7 +20,7 @@ const initialState = {
 
     selectedLanguage: null,
 
-    pagesData: {},
+    pagesData: [],
     pagesDataLoading: false,
     pagesDataError: null,
 }
@@ -122,30 +122,62 @@ export const fetchLanguages = () => {
     }
 };
 
-export const fetchPagesData = (parentId= null) => {
+export const pagesDataUpdate = (items,item) => {
+    return async (dispatch, getState) => {
+        try {
+            let parentId = "0";
+            formatData(items);
+            console.log("Parent id: " +parentId)
+            function formatData(arr) {
+                arr.forEach(i => {
+                    if (i.children) {
+                        if (i.children.find(el => el.id+"" === item.id+"")) {
+                            parentId = i.id;
+                        } else {
+                            formatData(i.children);
+                        }
+                    }
+                });
+            }
+        } catch (error) {
+            if (error.response?.data?.message) {
+                showNotification(error.response.data.message, 'danger', 'shifted');
+            } else {
+                showNotification('Some error occurred', 'danger', 'shifted');
+            }
+            console.log(error)
+        } finally {
+            dispatch(pagesDataLoading(false));
+        }
+    }
+};
+
+export const fetchPagesData = (parentId= "0") => {
     return async (dispatch, getState) => {
         try {
             if (!getState().pages?.selectedLanguage) return;
             dispatch(pagesDataLoading(true));
-            let response = await api.get(`pages?flt_language_id=${getState().pages?.selectedLanguage?.id}&flt_parent_id=${parentId || 0}`);
-
+            let response = await api.get(`pages?flt_language_id=${getState().pages?.selectedLanguage?.id}&flt_parent_id=${parentId}`);
             let data = response.data.items;
 
-            let pagesData = getState().pages.pagesData;
-
-            let result = {};
-            let childrenIdArr = [];
-            for (let item of data) {
-                result[item.id] = item;
-                item.haveChildren = true;
-                childrenIdArr.push(item.id);
+            if (parentId === "0") {
+                dispatch(pagesDataSet(data));
+            } else {
+                const newPagesData = getState().pages.pagesData;
+                function formatData(arr) {
+                    arr.forEach(i => {
+                        if(i.id+"" === parentId+"") {
+                            i.children = data
+                        } else {
+                            if (i.children) {
+                                formatData(i.children)
+                            }
+                        }
+                    });
+                }
+                formatData(newPagesData);
+                dispatch(pagesDataSet([...newPagesData]));
             }
-
-            if (parentId) {
-                pagesData[parentId].childrenIdArr = childrenIdArr;
-            }
-
-            dispatch(pagesDataSet({...pagesData, ...result}));
 
         } catch (error) {
             if (error.response?.data?.message) {

@@ -11,6 +11,7 @@ import DeleteIcon from "../../../../../assets/icons/trash.svg";
 import ViewIcon from "../../../../../assets/icons/view.svg";
 import PencilIcon from "../../../../../assets/icons/pencil.svg";
 import Select from "react-select";
+import PagesTree from "./PagesTree";
 
 const IndicatorIcon = styled.span`
   transition: 0.1s;
@@ -136,7 +137,9 @@ const Pages = () => {
     }, []);
 
     useEffect(() => {
-        dispatch(fetchPagesData());
+        if (selectedLanguage) {
+            dispatch(fetchPagesData());
+        }
     }, [selectedLanguage]);
 
     return (
@@ -181,11 +184,7 @@ const Pages = () => {
                         />
                     </div>
                     <div>
-                        {Object.keys(pagesData)
-                            .filter(key => pagesData[key].parent_id === "0")
-                            .map(key => (
-                                <Item key={pagesData[key].id} item={pagesData[key]}/>
-                            ))}
+                        <PagesTree/>
                     </div>
                 </div>
                 <div className="uk-width-2-3">

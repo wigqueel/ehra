@@ -6,6 +6,7 @@ import publicReducer from "./public-reducer";
 import themesReducer from "./themes-reducer";
 import languagesReducer from "./languages-reducer";
 import pagesReducer from "./pages-reducer";
+import pageInfoReducer from "./pageInfo-reducer";
 
 let reducers = combineReducers({
     pages: pagesReducer,
@@ -14,6 +15,7 @@ let reducers = combineReducers({
     app: AppReducer,
     auth: AuthReducer,
     public: publicReducer,
+    pageInfo: pageInfoReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

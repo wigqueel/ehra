@@ -180,6 +180,9 @@ export const fetchPagesData = (parentId= "0") => {
             }
 
         } catch (error) {
+            if (parentId === "0") {
+                dispatch(pagesDataSet([]));
+            }
             if (error.response?.data?.message) {
                 showNotification(error.response.data.message, 'danger', 'shifted');
             } else {

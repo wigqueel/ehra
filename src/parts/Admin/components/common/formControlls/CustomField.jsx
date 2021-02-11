@@ -15,6 +15,7 @@ const StyledField = styled.input`
     border-radius: 12px;
     outline: none;
     transition: border-color .3s;
+    opacity: ${props => props.disabled ? "0.8" : "1"};
 
     &.has-error {
         border-color: red;
@@ -26,13 +27,13 @@ const ErrorMessage = styled.div`
     color: red;
 `
 
-const CustomField = ({type, placeholder, label, className, ...props}) => {
+const CustomField = ({type, placeholder, label, className, disabled, ...props}) => {
     return (
         <Field {...props}>
             {({ input, meta }) => (
                 <div className={className}>
                     {label && <label className={`uk-display-block uk-margin-small-bottom`}>{label}</label>}
-                    <StyledField {...input} type={type} placeholder={placeholder} className={(meta.error && meta.touched) && `has-error`}/>
+                    <StyledField {...input} disabled={disabled} type={type} placeholder={placeholder} className={(meta.error && meta.touched) && `has-error`}/>
                     {meta.error && meta.touched && <ErrorMessage>{meta.error}</ErrorMessage>}
                 </div>
             )}  

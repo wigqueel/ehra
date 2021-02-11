@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import styled from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
 import {
     fetchLanguages,
@@ -7,118 +6,10 @@ import {
     removePageChildren,
     selectedLanguageSet
 } from "../../../../../redux/pages-reducer";
-import DeleteIcon from "../../../../../assets/icons/trash.svg";
-import ViewIcon from "../../../../../assets/icons/view.svg";
-import PencilIcon from "../../../../../assets/icons/pencil.svg";
 import Select from "react-select";
 import PagesTree from "./PagesTree";
-
-const IndicatorIcon = styled.span`
-  transition: 0.1s;
-  transform: rotate(${props => props.open ? "90deg" : "0deg"})
-`;
-
-const Action = styled.button`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  background: none;
-  padding: 5px;
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
-  cursor: pointer;
-  transition: 0.3s;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-
-  &:hover {
-    background: rgb(80 118 156 / 10%);
-    opacity: 1;
-  }
-
-  &:focus {
-    outline: none;
-  }
-`;
-
-const ActionContainer = styled.div`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: #F8F9FD;
-  border-radius: 18px;
-  padding: 2px;
-  visibility: hidden;
-  opacity: 0;
-  transition: 0.3s;
-`;
-
-const ToggleIndicator = ({open, className}) => {
-    return (
-        <IndicatorIcon className={className} open={open} data-uk-icon="chevron-right"/>
-    )
-}
-
-const ItemContent = styled.div`
-  &:hover {
-    ${ActionContainer} {
-      visibility: visible;
-      opacity: 1;
-    }
-  }
-`;
-
-const ItemContainer = styled.div`
-  user-select: none;
-  cursor: pointer;
-`;
-
-const Item = ({item}) => {
-    const dispatch = useDispatch();
-    const pagesData = useSelector(state => state.pages.pagesData);
-    const selectedLanguage = useSelector(state => state.pages.selectedLanguage);
-
-    const handleClick = (e) => {
-        e.stopPropagation();
-        if (!item.haveChildren) return;
-        if (!!item.childrenIdArr?.length) {
-            dispatch(removePageChildren(item.id))
-        } else {
-            dispatch(fetchPagesData(item.id))
-        }
-    }
-    return (
-        <ItemContainer>
-            <ItemContent onClick={handleClick} className="uk-margin-remove uk-text-nowrap uk-flex uk-flex-middle">
-                <span className="uk-margin-small-right">{item.name}</span>
-                {item?.haveChildren &&
-                <ToggleIndicator className="uk-margin-small-right" open={!!item.childrenIdArr?.length}/>
-                }
-                <ActionContainer>
-                    <Action><img src={ViewIcon} alt="view"/></Action>
-                    <Action><img src={PencilIcon} alt="edit"/></Action>
-                    <Action><img src={DeleteIcon} alt="delete"/></Action>
-                    <Action><img src={DeleteIcon} alt="copy"/></Action>
-                </ActionContainer>
-
-            </ItemContent>
-            {!!item.childrenIdArr?.length &&
-            <div className="uk-margin-left uk-margin-small-bottom">
-                {item.childrenIdArr.map(elId => (
-                    <Item key={pagesData[elId]?.id} item={pagesData[elId]}/>
-                ))}
-            </div>
-            }
-
-        </ItemContainer>
-    )
-}
+import {Link} from "react-router-dom";
+import Button from "../../common/buttons/Button";
 
 const Pages = () => {
     const pagesData = useSelector(state => state.pages.pagesData);
@@ -184,7 +75,10 @@ const Pages = () => {
                         />
                     </div>
                     <div>
-                        <PagesTree/>
+                        <div className="uk-margin-bottom">
+                            <PagesTree/>
+                        </div>
+                        <Button $small as={Link} to="/admiral-admin/create-page" variant="primary">Create new</Button>
                     </div>
                 </div>
                 <div className="uk-width-2-3">

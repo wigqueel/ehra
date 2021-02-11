@@ -21,6 +21,7 @@ import LanguagesUpdate from '../CRUDs/Languages/Update';
 import StyledNotification from '../styled/StyledNotification';
 import { useSelector } from 'react-redux';
 import Pages from "../CRUDs/Pages/Pages";
+import EditPage from "../CRUDs/Pages/EditPage";
 
 
 const AdminWrapper = () => {
@@ -30,7 +31,7 @@ const AdminWrapper = () => {
     return (
         <>
             {true
-                ? <>    
+                ? <>
                     <Header />
                     <Aside />
 
@@ -98,7 +99,19 @@ const AdminWrapper = () => {
                                 path="/admiral-admin/pages"
                                 component={Pages}
                             />
-                            
+
+                            <Route
+                                exact
+                                path="/admiral-admin/create-page"
+                                component={EditPage}
+                            />
+
+                            <Route
+                                exact
+                                path="/admiral-admin/pages/:id"
+                                component={EditPage}
+                            />
+
                             <Route path="/404" component={NotFound}/>
 
                             <Redirect to="/404"/>

@@ -10,7 +10,7 @@ import React from "react";
 // <Button variant="danger">Danger</Button>
 // <Button variant="secondary">Secondary</Button>
 // <Button $iconOnly><img src={PlusIcon} alt=""/></Button>
-// <Button small>small</Button>
+// <Button $small>small</Button>
 
 const handleVariant = variant => {
     switch (variant) {
@@ -74,7 +74,7 @@ const Button = styled.button`
   font-weight: 500;
   font-size: 14px;
   line-height: 16px;
-  display: inline-block;
+  display: inline-flex;
   outline: none;
   border: none;
   font-family: "E-Ukraine";
@@ -119,7 +119,7 @@ const Button = styled.button`
     box-shadow: none;
   `};
 
-  ${(props) => props?.small && css`
+  ${(props) => props?.$small && css`
     font-weight: 300;
     font-size: 13px;
     padding: 10px 20px;

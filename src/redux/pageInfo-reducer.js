@@ -239,7 +239,7 @@ export const updatePage = (id, values) => {
             history.push("/admiral-admin/pages")
         } catch (error) {
             if (error.response?.data?.message) {
-                showNotification(error.response.data.message, 'danger', 'shifted');
+                showNotification(error.response.data.message.join(), 'danger', 'shifted');
             } else {
                 showNotification('Some error occurred', 'danger', 'shifted');
             }
@@ -263,7 +263,7 @@ export const createPage = (values) => {
             history.push("/admiral-admin/pages")
         } catch (error) {
             if (error.response?.data?.message) {
-                showNotification(error.response.data.message, 'danger', 'shifted');
+                showNotification(error.response.data.message.join(), 'danger', 'shifted');
             } else {
                 showNotification('Some error occurred', 'danger', 'shifted');
             }

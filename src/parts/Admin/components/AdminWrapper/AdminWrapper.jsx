@@ -102,13 +102,13 @@ const AdminWrapper = () => {
 
                             <Route
                                 exact
-                                path="/admiral-admin/create-page"
+                                path="/admiral-admin/pages/create"
                                 component={EditPage}
                             />
 
                             <Route
                                 exact
-                                path="/admiral-admin/pages/:id"
+                                path="/admiral-admin/pages/update/:id"
                                 component={EditPage}
                             />
 

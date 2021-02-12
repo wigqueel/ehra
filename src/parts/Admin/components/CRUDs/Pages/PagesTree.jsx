@@ -4,7 +4,12 @@ import history from '../../../../../history'
 import Nestable from 'react-nestable';
 import styled from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchPagesData, pagesDataUpdate, removePageChildren} from "../../../../../redux/pages-reducer";
+import {
+    activePageId,
+    fetchPagesData,
+    hidePageChildren,
+    pagesDataUpdate, setActivePageId,
+} from "../../../../../redux/pages-reducer";
 import DeleteIcon from "../../../../../assets/icons/trash.svg";
 import {Link} from "react-router-dom";
 import EyeIcon from "../../../../../assets/icons/eye.svg";
@@ -12,8 +17,8 @@ import PencilIcon from "../../../../../assets/icons/pencil.svg";
 import CopyIcon from "../../../../../assets/icons/copy.svg";
 import {deletePage, duplicatePage, editableSet} from "../../../../../redux/pageInfo-reducer";
 
-const renderItem = ({ item }) => {
-    return(
+const renderItem = ({item}) => {
+    return (
         <RenderItem item={item}/>
     )
 };
@@ -59,7 +64,20 @@ const Action = styled.button`
   }
 `;
 
+const ToggleIndicatorContainer = styled.div`
+  width: 20px;
+  height: 20px;
+`;
+
+const SpinnerContainer = styled.div`
+  color: #4974E1;
+`;
+
 const StyledRenderItem = styled.div`
+  padding: 0 6px;
+  border-radius: 7px;
+  border: 1px solid ${props => props.active ? "#4974E1" : "transparent"};
+
   &:hover {
     ${ActionContainer} {
       opacity: 1;
@@ -68,13 +86,17 @@ const StyledRenderItem = styled.div`
   }
 `;
 
-const RenderItem = ({ item }) => {
+const RenderItem = ({item}) => {
     const dispatch = useDispatch();
+    const parentLoadingId = useSelector(state => state.pages.parentLoadingId);
+    const activePageId = useSelector(state => state.pages.activePageId);
     const handleClick = (e) => {
         e.stopPropagation();
+        if (!item.hasChild) return;
         if (!!item.children?.length) {
-            dispatch(removePageChildren(item.id))
+            dispatch(hidePageChildren(item.id))
         } else {
+            dispatch(setActivePageId(item.id))
             dispatch(fetchPagesData(item.id))
         }
     }
@@ -82,13 +104,13 @@ const RenderItem = ({ item }) => {
     const handleView = (e) => {
         e.stopPropagation();
         dispatch(editableSet(false));
-        history.push(`/admiral-admin/pages/${item.id}`);
+        history.push(`/admiral-admin/pages/update/${item.id}`);
     }
 
     const handleEdit = (e) => {
         e.stopPropagation();
         dispatch(editableSet(true));
-        history.push(`/admiral-admin/pages/${item.id}`);
+        history.push(`/admiral-admin/pages/update/${item.id}`);
     }
 
     const handleDelete = (e) => {
@@ -101,18 +123,27 @@ const RenderItem = ({ item }) => {
         dispatch(duplicatePage(item));
     }
 
-    return(
-        <StyledRenderItem onClick={handleClick} className="uk-flex uk-flex-middle">
-            <p className='uk-margin-remove-bottom uk-margin-small-right'>{item.name}</p>
-            {!!item.children?.length &&
-                <ToggleIndicator className="uk-margin-small-right" open={!!item.children?.length}/>
-            }
+    return (
+        <StyledRenderItem active={activePageId === item.id} onClick={handleClick} className="uk-flex uk-flex-middle">
+            <p className="uk-margin-remove-vertical uk-margin-small-right">{item.name}</p>
+            <ToggleIndicatorContainer className="uk-margin-small-right">
+                {item.hasChild &&
+                <ToggleIndicator className="uk-margin-remove-vertical"
+                                 open={!!item.children?.length}/>
+                }
+            </ToggleIndicatorContainer>
             <ActionContainer>
                 <Action onClick={handleView}><img src={EyeIcon} alt="view"/></Action>
                 <Action onClick={handleEdit}><img src={PencilIcon} alt="edit"/></Action>
                 <Action onClick={handleDuplicate}><img src={CopyIcon} alt="copy"/></Action>
                 <Action onClick={handleDelete}><img src={DeleteIcon} alt="delete"/></Action>
             </ActionContainer>
+
+            {parentLoadingId === item.id &&
+            <SpinnerContainer className="uk-margin-small-left">
+                <div data-uk-spinner="ratio: 0.6"/>
+            </SpinnerContainer>
+            }
         </StyledRenderItem>
 
     )

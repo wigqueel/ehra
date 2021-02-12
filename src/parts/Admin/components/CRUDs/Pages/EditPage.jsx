@@ -7,7 +7,7 @@ import {
     createPage,
     editableSet,
     fetchLanguagesList,
-    fetchPageInfo,
+    fetchPageInfo, fetchPagesList,
     pageInfoSet,
     updatePage
 } from "../../../../../redux/pageInfo-reducer";
@@ -17,10 +17,16 @@ import CustomField from "../../common/formControlls/CustomField";
 import ButtonsWrapper from "../../common/ButtonsWrapper";
 import {updateItem} from "../../../../../redux/themes-reducer";
 import Select from "react-select";
+import Skeleton from 'react-loading-skeleton';
 
-const ReactSelectAdapter = ({input, ...rest}) => (
+const ReactSelectAdapter = ({input, additionalOnChange, ...rest}) => (
     <Select
         {...input} {...rest}
+
+        onChange={e => {
+            input.onChange(e);
+            additionalOnChange && additionalOnChange(e);
+        }}
         isSearchable={false}
         theme={(theme) => ({
             ...theme,
@@ -30,6 +36,7 @@ const ReactSelectAdapter = ({input, ...rest}) => (
                 primary: '#4974E1',
             },
         })}
+
         styles={
             {
                 control: styles => ({
@@ -97,7 +104,16 @@ const EditPage = () => {
         }
         return (
             <>
-                <h1 className="uk-text-center uk-text-bold">{id ? "Edit page" : "Create page"}</h1>
+                <h1 className="uk-text-center uk-text-bold">{!id ? "Create page" : (
+                    <>
+                        {editable ?
+                            "Edit page"
+                            :
+                            "View page"
+                        }
+                    </>
+                )}</h1>
+
                 <div className="uk-margin-bottom uk-flex uk-flex-middle uk-flex-between">
                     <div>
                         <Button onClick={() => history.goBack()} $iconOnly><img src={BackIcon} alt=""/></Button>
@@ -109,84 +125,133 @@ const EditPage = () => {
                     </div>
                     }
                 </div>
-                {!pageInfoLoading && !languagesListLoading && !pagesListLoading &&
-                <div>
+                {!pageInfoLoading ?
+                    <div>
+                        <Form
+                            keepDirtyOnReinitialize
+                            onSubmit={onSubmit}
+                            initialValues={{
+                                name: pageInfo?.name || "",
+                                url: pageInfo?.url || "",
+                                active: pageInfo?.active || "",
+                                language: {
+                                    value: pageInfo?.language_id || languagesList[0]?.id,
+                                    label: pageInfo ? languagesList.find(el => el.id === pageInfo.language_id)?.name : languagesList[0]?.name
+                                },
+                                parent: {
+                                    value: pageInfo?.parent_id || "0",
+                                    label: pagesList.find(el => el.id === pageInfo?.parent_id)?.name || "None"
+                                },
 
-                    <Form
-                        onSubmit={onSubmit}
-                        keepDirtyOnReinitialize
-                        initialValues={{
-                            name: pageInfo?.name || "",
-                            url: pageInfo?.url || "",
-                            active: pageInfo?.active || "",
-                            language: {
-                                value: pageInfo?.language_id || languagesList[0]?.id,
-                                label: pageInfo ? languagesList.find(el => el.id === pageInfo.language_id)?.name : languagesList[0]?.name
-                            },
-                            parent: {
-                                value: pageInfo?.parent_id || "0",
-                                label: pagesList.find(el => el.id === pageInfo?.parent_id)?.name || "None"
-                            },
-
-                        }}
-                        render={({handleSubmit, form, submitting, pristine, values}) => (
-                            <form onSubmit={handleSubmit} className={'uk-margin-top'}>
-                                <div>
-                                    <CustomField
-                                        className="uk-margin-bottom"
-                                        label="Name"
-                                        name="name"
-                                        type="text"
-                                        placeholder="Page name"
-                                        disabled={!editable}
-                                    />
-                                    <CustomField
-                                        className="uk-margin-bottom"
-                                        label="URL"
-                                        name="url"
-                                        type="text"
-                                        placeholder="url"
-                                        disabled={!editable}
-                                    />
-
-                                    <div className="uk-margin-bottom">
-                                        <p className="uk-margin-small-bottom">Language</p>
-                                        <Field
-                                            name="language"
-                                            component={ReactSelectAdapter}
-                                            value={values.language}
-                                            options={languagesList.map(el => {
-                                                return {value: el.id + "", label: el.name}
-                                            })}
-                                            isDisabled={!editable}
+                            }}
+                            render={({handleSubmit, form, submitting, pristine, values}) => (
+                                <form onSubmit={handleSubmit} className={'uk-margin-top'}>
+                                    <div>
+                                        <CustomField
+                                            className="uk-margin-bottom"
+                                            label="Name"
+                                            name="name"
+                                            type="text"
+                                            placeholder="Page name"
+                                            disabled={!editable}
                                         />
+                                        <CustomField
+                                            className="uk-margin-bottom"
+                                            label="URL"
+                                            name="url"
+                                            type="text"
+                                            placeholder="url"
+                                            disabled={!editable}
+                                        />
+                                        <div className="uk-margin-bottom">
+                                            <p className="uk-margin-small-bottom">Language</p>
+                                            {!languagesListLoading ?
+                                                <Field
+                                                    name="language"
+                                                    component={ReactSelectAdapter}
+                                                    value={values.language}
+                                                    options={languagesList.map(el => {
+                                                        return {value: el.id + "", label: el.name}
+                                                    })}
+                                                    additionalOnChange={e => dispatch(fetchPagesList(e.value))}
+                                                    isDisabled={!editable}
+                                                />
+                                                :
+                                                <div>
+                                                    <Skeleton height={48}/>
+                                                </div>
+                                            }
+                                        </div>
+
+
+                                        <div className="uk-margin-bottom">
+                                            <p className="uk-margin-small-bottom">Parent pages</p>
+                                            {!pagesListLoading ?
+                                                <Field
+                                                    name="parent"
+                                                    component={ReactSelectAdapter}
+                                                    value={values.parent}
+                                                    options={[
+                                                        {value: "0", label: "None"},
+                                                        ...pagesList.map(el => {
+                                                            return {value: el.id + "", label: el.name}
+                                                        })
+                                                    ]}
+                                                    menuPlacement="top"
+                                                    isDisabled={!editable}
+                                                />
+                                                :
+                                                <div>
+                                                    <Skeleton height={48}/>
+                                                </div>
+                                            }
+                                        </div>
+
                                     </div>
 
-                                    <div className="uk-margin-bottom">
-                                        <p className="uk-margin-small-bottom">Parent pages</p>
-                                        <Field
-                                            name="parent"
-                                            component={ReactSelectAdapter}
-                                            value={values.parent}
-                                            options={[
-                                                {value: "0", label: "None"},
-                                                ...pagesList.map(el => {
-                                                    return {value: el.id + "", label: el.name}
-                                                })
-                                            ]}
-                                            menuPlacement="top"
-                                            isDisabled={!editable}
-                                        />
-                                    </div>
-                                </div>
-
-                                {editable &&
-                                    <Button type="submit" disabled={updatePageLoading} variant="primary">Save changes</Button>
-                                }
-                            </form>
-                        )}
-                    />
-                </div>
+                                    {editable &&
+                                    <Button type="submit" disabled={updatePageLoading} variant="primary">Save
+                                        changes</Button>
+                                    }
+                                </form>
+                            )}
+                        />
+                    </div>
+                    :
+                    <div>
+                        <div className="uk-margin-bottom">
+                            <div className="uk-margin-small-bottom">
+                                <Skeleton width={100}/>
+                            </div>
+                            <div>
+                                <Skeleton height={48}/>
+                            </div>
+                        </div>
+                        <div className="uk-margin-bottom">
+                            <div className="uk-margin-small-bottom">
+                                <Skeleton width={120}/>
+                            </div>
+                            <div>
+                                <Skeleton height={48}/>
+                            </div>
+                        </div>
+                        <div className="uk-margin-bottom">
+                            <div className="uk-margin-small-bottom">
+                                <Skeleton width={90}/>
+                            </div>
+                            <div>
+                                <Skeleton height={48}/>
+                            </div>
+                        </div>
+                        <div className="uk-margin-bottom">
+                            <div className="uk-margin-small-bottom">
+                                <Skeleton width={120}/>
+                            </div>
+                            <div>
+                                <Skeleton height={48}/>
+                            </div>
+                        </div>
+                    </div>
                 }
             </>
         );

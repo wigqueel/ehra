@@ -26,15 +26,17 @@ const initialState = {
 const themesReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_ITEMS:
+            debugger
             return {
                 ...state,
-                items: action.payload.items,
-                totalCount: action.payload.totalCount
+                items: action.data.items,
+                totalCount: action.data.totalCount
             }
         case SET_ITEM:
+            debugger
             return {
                 ...state,
-                item: action.payload
+                item: action.data
             }
         case SET_CURRENT_PAGE:
             return {
@@ -45,7 +47,7 @@ const themesReducer = (state = initialState, action) => {
             let newSortType = '';
 
             if (action.oldSortField === action.sortField) {
-                if (action.oldSortType === 'sort_asc') {
+                if (action.oldSortType === 'sort_asc') {    
                     newSortType = 'sort_desc';
                 } else {
                     newSortType = 'sort_asc';
@@ -62,49 +64,72 @@ const themesReducer = (state = initialState, action) => {
         case SET_FILTER_STRING:
             return {
                 ...state,
-                filterString: action.payload
+                filterString: action.filterString
             }
         case SET_PAGE_SIZE:
             return {
                 ...state,
-                pageSize: action.payload
+                pageSize: action.pageSize
             }
         default:
             return state;
     }
 }
 
-const setItems = data => ({
-    type: SET_ITEMS,
-    payload: data
-});
+// const setItems = data => ({
+//     type: SET_ITEMS,
+//     payload: data
+// });
 
-const setItem = data => ({
-    type: SET_ITEM,
-    payload: data
-});
+// const setItem = data => ({
+//     type: SET_ITEM,
+//     payload: data
+// });
 
-const setPageSize = data => ({
-    type: SET_PAGE_SIZE,
-    payload: data
-});
+// const setPageSize = data => ({
+//     type: SET_PAGE_SIZE,
+//     payload: data
+// });
 
-const setFilterString = (filterString) => ({
-    type: SET_FILTER_STRING,
-    payload: filterString
-});
+// const setFilterString = (filterString) => ({
+//     type: SET_FILTER_STRING,
+//     payload: filterString
+// });
 
-export const setCurrentPage = (currentPage) => ({
-    type: SET_CURRENT_PAGE,
-    currentPage: currentPage
-});
+// export const setCurrentPage = (currentPage) => ({
+//     type: SET_CURRENT_PAGE,
+//     currentPage: currentPage 
+// });
 
-export const changeSortActionCreator = (oldSortField, oldSortType, sortField) => ({
-    type: CHANGE_SORT,
-    oldSortField,
-    oldSortType,
-    sortField
-});
+// export const changeSortActionCreator = (oldSortField, oldSortType, sortField) => ({
+//     type: CHANGE_SORT,
+//     oldSortField,
+//     oldSortType,
+//     sortField
+// });
+
+
+function makeActionCreator(type, ...argNames) {
+   
+    return function(...args) {
+      let action = { type }
+      argNames.forEach((arg, index) => {
+        action[argNames[index]] = args[index]
+      })
+      debugger
+      return action
+    }
+  }
+
+const setItems =  makeActionCreator(SET_ITEMS, 'data')
+const setItem =  makeActionCreator(SET_ITEM, 'data')
+const setPageSize =  makeActionCreator(SET_PAGE_SIZE, 'pageSize')
+const setFilterString =  makeActionCreator(SET_FILTER_STRING, 'filterString')
+export const setCurrentPage = makeActionCreator(SET_CURRENT_PAGE, 'currentPage')
+export const changeSortActionCreator = makeActionCreator(CHANGE_SORT, 'oldSortField', 'oldSortType', 'sortField' )
+
+
+
 
 export const updatePageSize = (pageSize) => {
     return async (dispatch, getState) => {
@@ -114,8 +139,9 @@ export const updatePageSize = (pageSize) => {
 };
 
 export const getItems = (currentPage, pageSize) => {
+    
     return async (dispatch, getState) => {
-
+        debugger
         const sortField = getState().themes.sortField;
         const sortType = getState().themes.sortType;
         const filterString = getState().themes.filterString;
@@ -132,6 +158,7 @@ export const getItems = (currentPage, pageSize) => {
 
         try {
             let response = await api.get(`${ENTITY}?per_page=${pageSize}&page_number=${currentPage}&sort_field=${sortField}&sort_type=${sortType}${filterString}`);
+            debugger
             dispatch(setItems(response.data));
         } catch (error) {
             if (error.response?.data?.message) {

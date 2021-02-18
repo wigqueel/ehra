@@ -4,9 +4,9 @@ import {
     getItems,
     setActive,
     deleteItem,
-    changeSort,
     applyFilter,
-    updatePageSize
+    updatePageSize,
+    changeSort,
 } from '../../../../../redux/themes-reducer';
 import Action from '../../common/Action';
 import ActionsWrapper from '../../common/ActionsWrapper';

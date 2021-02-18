@@ -1,17 +1,9 @@
 import {api} from '../api/api';
 import {showNotification} from '../parts/Admin/utils/notifications/notifications';
-import history from '../history'
+import history from '../history';
+import {SET_ITEMS, setItems, SET_ITEM, setItem, SET_CURRENT_PAGE, setCurrentPage, CHANGE_SORT, changeSortActionCreator,SET_FILTER_STRING, setFilterString, SET_PAGE_SIZE, setPageSize } from "./actions";
 
 const ENTITY = 'themes';
-
-const SET_ITEMS = `SET_ITEMS_${ENTITY}`;
-const SET_ITEM = 'SET_ITEM';
-const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
-const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
-const CHANGE_SORT = 'CHANGE_SORT';
-const SET_FILTER_STRING = 'SET_FILTER_STRING';
-
-
 
 const initialState = {
     items: null,
@@ -76,67 +68,6 @@ const themesReducer = (state = initialState, action) => {
     }
 }
 
-// const setItems = data => ({
-//     type: SET_ITEMS,
-//     data: data
-// });
-
-// const setItem = data => ({
-//     type: SET_ITEM,
-//     payload: data
-// });
-
-// const setPageSize = data => ({
-//     type: SET_PAGE_SIZE,
-//     payload: data
-// });
-
-// const setFilterString = (filterString) => ({
-//     type: SET_FILTER_STRING,
-//     payload: filterString
-// });
-
-// export const setCurrentPage = (currentPage) => ({
-//     type: SET_CURRENT_PAGE,
-//     currentPage: currentPage 
-// });
-
-// export const changeSortActionCreator = (oldSortField, oldSortType, sortField) => ({
-//     type: CHANGE_SORT,
-//     oldSortField,
-//     oldSortType,
-//     sortField
-// });
-
-
-function makeActionCreator(type, ...argNames) {
-   
-    return function(...args) {
-      let action = { type }
-      argNames.forEach((arg, index) => {
-        action[argNames[index]] = args[index]
-      })
-      
-      return action
-    }
-  }
-
-const setItems =  makeActionCreator(SET_ITEMS, 'data')
-const setItem =  makeActionCreator(SET_ITEM, 'data')
-const setPageSize =  makeActionCreator(SET_PAGE_SIZE, 'pageSize')
-const setFilterString =  makeActionCreator(SET_FILTER_STRING, 'filterString')
-export const setCurrentPage = makeActionCreator(SET_CURRENT_PAGE, 'currentPage')
-export const changeSortActionCreator = makeActionCreator(CHANGE_SORT, 'oldSortField', 'oldSortType', 'sortField' )
-
-
-
-
-export const updatePageSize = (pageSize) => {
-    return async (dispatch, getState) => {
-        dispatch(setPageSize(pageSize))
-        dispatch(setCurrentPage(1))
-    }
-};
 
 export const getItems = (currentPage, pageSize) => {
     
@@ -176,7 +107,14 @@ export const changeSort = (oldSortField, oldSortType, sortField) => {
         dispatch(changeSortActionCreator(oldSortField, oldSortType, sortField));
         dispatch(getItems());
     }
-};
+  };
+
+  export const updatePageSize = (pageSize) => {
+    return async (dispatch, getState) => {
+        dispatch(setPageSize(pageSize))
+        dispatch(setCurrentPage(1))
+    }
+  };
 
 export const setActive = (id) => {
     return async (dispatch) => {

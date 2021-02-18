@@ -88,7 +88,6 @@ const List = () => {
 
     useEffect(() => {
         dispatch(getItems(currentPage, pageSize));
-        debugger
         dispatch(setBreadcrumbs([
             {
                 name: 'Dashboard',

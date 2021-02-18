@@ -2,14 +2,16 @@ import {api} from '../api/api';
 import {showNotification} from '../parts/Admin/utils/notifications/notifications';
 import history from '../history'
 
-const SET_ITEMS = 'SET_ITEMS';
+const ENTITY = 'themes';
+
+const SET_ITEMS = `SET_ITEMS_${ENTITY}`;
 const SET_ITEM = 'SET_ITEM';
 const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 const CHANGE_SORT = 'CHANGE_SORT';
 const SET_FILTER_STRING = 'SET_FILTER_STRING';
 
-const ENTITY = 'themes';
+
 
 const initialState = {
     items: null,
@@ -26,14 +28,12 @@ const initialState = {
 const themesReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_ITEMS:
-            debugger
             return {
                 ...state,
                 items: action.data.items,
                 totalCount: action.data.totalCount
             }
         case SET_ITEM:
-            debugger
             return {
                 ...state,
                 item: action.data
@@ -78,7 +78,7 @@ const themesReducer = (state = initialState, action) => {
 
 // const setItems = data => ({
 //     type: SET_ITEMS,
-//     payload: data
+//     data: data
 // });
 
 // const setItem = data => ({
@@ -116,7 +116,7 @@ function makeActionCreator(type, ...argNames) {
       argNames.forEach((arg, index) => {
         action[argNames[index]] = args[index]
       })
-      debugger
+      
       return action
     }
   }
@@ -141,7 +141,6 @@ export const updatePageSize = (pageSize) => {
 export const getItems = (currentPage, pageSize) => {
     
     return async (dispatch, getState) => {
-        debugger
         const sortField = getState().themes.sortField;
         const sortType = getState().themes.sortType;
         const filterString = getState().themes.filterString;
@@ -158,7 +157,6 @@ export const getItems = (currentPage, pageSize) => {
 
         try {
             let response = await api.get(`${ENTITY}?per_page=${pageSize}&page_number=${currentPage}&sort_field=${sortField}&sort_type=${sortType}${filterString}`);
-            debugger
             dispatch(setItems(response.data));
         } catch (error) {
             if (error.response?.data?.message) {

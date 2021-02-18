@@ -1,11 +1,13 @@
 import React from 'react';
-
+import Header from './Header/Header';
 
 const Trafalgar = () => {
 
+    
+
     return (
         
-        'Trafalgar'
+        <Header />
         
     )
 }

@@ -4,10 +4,10 @@ import { getActiveTheme } from '../../redux/public-reducer';
 import Trafalgar from './themes/Trafalgar/Trafalgar';
 
 
-const ThemesCase = ({name}) => {
-    switch (name) {
+const ThemesCase = ({themeName, themeContent}) => {
+    switch (themeName) {
         case 'Trafalgar':
-            return <Trafalgar />;
+            return <Trafalgar themeContent={themeContent}/>;
         default:
             return null;
     }
@@ -15,15 +15,18 @@ const ThemesCase = ({name}) => {
 
 const ThemesConfigurator = () => {
     const dispatch = useDispatch();
-    // const id = useSelector(state => state.public.activeThemeId);
-    const name = useSelector(state => state.public.activeThemeName);
+    // const themeId = useSelector(state => state.public.activeThemeId);
+    const themeName = useSelector(state => state.public.activeThemeName);
+    const themeContent = useSelector(state => state.public.activeThemeContent);
 
     useEffect(() => {
         dispatch(getActiveTheme());
-    }, [name]);
+        console.log(themeName);
+        console.log(themeContent);
+    }, []);
 
     return (
-        name && <ThemesCase name={name}/>
+        themeName && <ThemesCase themeName={themeName} themeContent={themeContent}/>
     )
 }
 

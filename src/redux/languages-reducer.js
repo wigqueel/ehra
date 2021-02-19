@@ -1,13 +1,8 @@
 import {api} from '../api/api';
 import { showNotification } from '../parts/Admin/utils/notifications/notifications';
 import history from "../history";
+import { SET_ITEMS, setItems, SET_ITEM, setItem, SET_CURRENT_PAGE, setCurrentPage, CHANGE_SORT, changeSortActionCreator, SET_FILTER_STRING, setFilterString, SET_PAGE_SIZE, setPageSize } from "./actions";
 
-const SET_ITEMS = 'SET_ITEMS';
-const SET_ITEM = 'SET_ITEM';
-const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
-const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
-const CHANGE_SORT = 'CHANGE_SORT';
-const SET_FILTER_STRING = 'SET_FILTER_STRING';
 
 const ENTITY = 'languages';
 
@@ -28,13 +23,13 @@ const languagesReducer = (state = initialState, action) => {
         case SET_ITEMS:
             return {
                 ...state,
-                items: action.payload.items,
-                totalCount: action.payload.totalCount
+                items: action.data.items,
+                totalCount: action.data.totalCount
             }
         case SET_ITEM:
             return {
                 ...state,
-                item: action.payload
+                item: action.data
             }
         case SET_CURRENT_PAGE:
             return {
@@ -62,49 +57,17 @@ const languagesReducer = (state = initialState, action) => {
         case SET_FILTER_STRING:
             return {
                 ...state,
-                filterString: action.payload
+                filterString: action.filterString
             }
         case SET_PAGE_SIZE:
             return {
                 ...state,
-                pageSize: action.payload
+                pageSize: action.pageSize
             }
         default:
             return state;
     }
 }
-
-const setItems = data => ({
-    type: SET_ITEMS,
-    payload: data
-});
-
-const setItem = data => ({
-    type: SET_ITEM,
-    payload: data
-});
-
-const setPageSize = data => ({
-    type: SET_PAGE_SIZE,
-    payload: data
-});
-
-const setFilterString = (filterString) => ({ 
-    type: SET_FILTER_STRING, 
-    payload: filterString
-});
-
-export const setCurrentPage = (currentPage) => ({ 
-    type: SET_CURRENT_PAGE, 
-    currentPage: currentPage 
-});
-
-export const changeSortActionCreator = (oldSortField, oldSortType, sortField) => ({ 
-    type: CHANGE_SORT, 
-    oldSortField,
-    oldSortType,
-    sortField
-});
 
 export const updatePageSize = (pageSize) => {
     return async (dispatch, getState) => {

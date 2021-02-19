@@ -265,10 +265,10 @@ export const createItem = ({name}) => {
     }
 };
 
-export const updateItem = ({name, id}) => {
+export const updateItem = ({name, id, ...themeParams}) => {
     return async (dispatch) => {
         try {
-            let response = await api.patch(`${ENTITY}/utilize/${id}`, {name});
+            let response = await api.patch(`${ENTITY}/utilize/${id}`, {name, content: themeParams});
 
             dispatch(getItems());
             dispatch(getItemData(id));

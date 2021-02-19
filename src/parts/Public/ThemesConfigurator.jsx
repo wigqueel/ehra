@@ -18,11 +18,9 @@ const ThemesConfigurator = () => {
     // const themeId = useSelector(state => state.public.activeThemeId);
     const themeName = useSelector(state => state.public.activeThemeName);
     const themeContent = useSelector(state => state.public.activeThemeContent);
-
+    
     useEffect(() => {
         dispatch(getActiveTheme());
-        console.log(themeName);
-        console.log(themeContent);
     }, []);
 
     return (

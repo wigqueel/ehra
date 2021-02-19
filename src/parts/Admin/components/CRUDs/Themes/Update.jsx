@@ -63,12 +63,11 @@ const Update = () => {
             }
         ]))
 
-        
     }, [item]);
 
     const onSubmit = values => {
-        window.alert(JSON.stringify(values, 0, 2))
-        // dispatch(updateItem(values));
+        // window.alert(JSON.stringify(values, 0, 2))
+        dispatch(updateItem(values));
     }
 
     return (
@@ -103,6 +102,7 @@ const Update = () => {
                                 name={field.name}
                                 type={field.type}
                                 placeholder={field.label}
+                                initialValue={item.content[field.name]}
                             />
                         </div>)}
 

@@ -1,5 +1,3 @@
-import themesReducer from "../../../../redux/themes-reducer";
-
 const themesOptions = [
     {
         name: 'phone',

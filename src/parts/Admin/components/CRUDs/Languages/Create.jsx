@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {createItem} from '../../../../../redux/languages-reducer';
+import {createItem} from '../../../../../redux/actions';
 import CardHeader from '../../styled/CardHeader';
 import CardTitle from '../../styled/CardTitle';
 import ButtonsWrapper from '../../common/ButtonsWrapper';
@@ -12,6 +12,8 @@ import {setBreadcrumbs} from '../../../../../redux/app-reducer';
 import CustomField from '../../common/formControlls/CustomField';
 
 import PlusIcon from '../../../../../assets/icons/plus.svg';
+
+const ENTITY = 'languages';
 
 const Create = () => {
         const dispatch = useDispatch();
@@ -34,7 +36,7 @@ const Create = () => {
         }, []);
 
         const onSubmit = values => {
-            dispatch(createItem(values));
+            dispatch(createItem(ENTITY,values));
         }
 
         return (

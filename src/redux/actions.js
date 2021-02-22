@@ -93,6 +93,28 @@ export const getItemData = (entity, id) => {
   }
 };
 
+export const setDefault = (entity,id) => {
+    return async (dispatch) => {
+
+        try {
+            let response = await api.get(`${entity}/set-default/${id}`);
+            showNotification(response.data.message, 'success', 'shifted');
+            dispatch(getItems(entity));
+            dispatch(getItemData(entity,id));
+            history.push('/admiral-admin/languages');
+        } catch (error) {
+            if (error.response?.data?.message) {
+                showNotification(error.response.data.message, 'danger', 'shifted');
+            } else {
+                showNotification('Some error occurred', 'danger', 'shifted');
+            }
+        } finally {
+
+        }
+
+    }
+};
+
 export const setActive = (entity,id) => {
   return async (dispatch) => {
       try {

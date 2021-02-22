@@ -1,10 +1,12 @@
 import {api} from '../api/api';
 import { showNotification } from '../parts/Admin/utils/notifications/notifications';
 import history from "../history";
-import { SET_ITEMS, setItems, SET_ITEM, setItem, SET_CURRENT_PAGE, setCurrentPage, CHANGE_SORT, changeSortActionCreator, SET_FILTER_STRING, setFilterString, SET_PAGE_SIZE, setPageSize } from "./actions";
+import { setItems, setItem, setCurrentPage, changeSortActionCreator, setFilterString, setPageSize } from "./actions";
 
 
 const ENTITY = 'languages';
+const ENTITY_UPPER_CASE = ENTITY.toUpperCase();
+
 
 const initialState = {
     items: null,
@@ -20,23 +22,23 @@ const initialState = {
 
 const languagesReducer = (state = initialState, action) => {
     switch (action.type) {
-        case SET_ITEMS:
+        case `SET_ITEMS_${ENTITY_UPPER_CASE}`:
             return {
                 ...state,
                 items: action.data.items,
                 totalCount: action.data.totalCount
             }
-        case SET_ITEM:
+        case `SET_ITEM_${ENTITY_UPPER_CASE}`:
             return {
                 ...state,
                 item: action.data
             }
-        case SET_CURRENT_PAGE:
+        case `SET_CURRENT_PAGE_${ENTITY_UPPER_CASE}`:
             return {
                 ...state,
                 currentPage: action.currentPage,
             }
-        case CHANGE_SORT:
+        case `CHANGE_SORT_${ENTITY_UPPER_CASE}`:
             let newSortType = '';
 
             if (action.oldSortField === action.sortField) {
@@ -54,12 +56,12 @@ const languagesReducer = (state = initialState, action) => {
                 sortField: action.sortField,
                 sortType: newSortType,
             }
-        case SET_FILTER_STRING:
+        case `SET_FILTER_STRING_${ENTITY_UPPER_CASE}`:
             return {
                 ...state,
                 filterString: action.filterString
             }
-        case SET_PAGE_SIZE:
+        case `SET_PAGE_SIZE_${ENTITY_UPPER_CASE}`:
             return {
                 ...state,
                 pageSize: action.pageSize
@@ -71,8 +73,8 @@ const languagesReducer = (state = initialState, action) => {
 
 export const updatePageSize = (pageSize) => {
     return async (dispatch, getState) => {
-        dispatch(setPageSize(pageSize))
-        dispatch(setCurrentPage(1))
+        dispatch(setPageSize(ENTITY_UPPER_CASE,pageSize))
+        dispatch(setCurrentPage(ENTITY_UPPER_CASE,1))
     }
 };
 
@@ -86,7 +88,7 @@ export const getItems = (currentPage, pageSize) => {
         if (!currentPage) {
             currentPage = getState().themes.currentPage;
         } else {
-            dispatch(setCurrentPage(currentPage));
+            dispatch(setCurrentPage(ENTITY_UPPER_CASE,currentPage));
         }
 
         if (!pageSize) {
@@ -95,7 +97,7 @@ export const getItems = (currentPage, pageSize) => {
 
         try {
             let response = await api.get(`${ENTITY}?per_page=${pageSize}&page_number=${currentPage}&sort_field=${sortField}&sort_type=${sortType}${filterString}`);
-            dispatch(setItems(response.data));
+            dispatch(setItems(ENTITY_UPPER_CASE, response.data));
         } catch(error) {
             if (error.response?.data?.message) {
                 showNotification(error.response.data.message, 'danger', 'shifted');
@@ -111,7 +113,7 @@ export const getItems = (currentPage, pageSize) => {
 
 export const changeSort = (oldSortField, oldSortType, sortField) => {
     return (dispatch) => {
-        dispatch(changeSortActionCreator(oldSortField, oldSortType, sortField));
+        dispatch(changeSortActionCreator(ENTITY_UPPER_CASE, oldSortField, oldSortType, sortField));
         dispatch(getItems());
     }
 };
@@ -186,7 +188,7 @@ export const getItemData = (id) => {
     return async (dispatch) => {
         try {
             let response = await api.get(`${ENTITY}/view/${id}`);
-            dispatch(setItem(response.data));
+            dispatch(setItem(ENTITY_UPPER_CASE,response.data));
         } catch(error) {
             if (error.response?.data?.message) {
                 showNotification(error.response.data.message, 'danger', 'shifted');
@@ -265,7 +267,7 @@ export const applyFilter = (values) => {
             }
         }
 
-        dispatch(setFilterString(filterString));
+        dispatch(setFilterString(ENTITY_UPPER_CASE,filterString));
         dispatch(getItems());
     }
 };

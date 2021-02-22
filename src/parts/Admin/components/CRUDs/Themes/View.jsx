@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {setActive, getItemData, deleteItem} from '../../../../../redux/themes-reducer';
+import {setActive, getItemData, deleteItem} from '../../../../../redux/actions';
 import CardHeader from '../../styled/CardHeader';
 import CardTitle from '../../styled/CardTitle';
 import {Redirect, useParams} from 'react-router-dom';
@@ -8,6 +8,8 @@ import ButtonsWrapper from '../../common/ButtonsWrapper';
 import styled from 'styled-components';
 import {setBreadcrumbs} from '../../../../../redux/app-reducer';
 import Button from "../../common/buttons/Button";
+
+const ENTITY = 'themes';
 
 const ViewTable = styled.table`
   text-align: left;
@@ -54,15 +56,15 @@ const View = () => {
     }
 
     const setActiveTheme = () => {
-        dispatch(setActive(id));
+        dispatch(setActive(ENTITY,id));
     }
 
     const onClickDeleteTheme = () => {
-        dispatch(deleteItem(id));
+        dispatch(deleteItem(ENTITY,id));
     }
 
     useEffect(() => {
-        dispatch(getItemData(id));
+        dispatch(getItemData(ENTITY,id));
     }, [id]);
 
     useEffect(() => {

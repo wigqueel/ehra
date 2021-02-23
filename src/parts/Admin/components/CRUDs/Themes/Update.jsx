@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setActive, deleteItem, getItemData, updateItem } from '../../../../../redux/themes-reducer';
+import { setActive, deleteItem, getItemData, updateItem } from '../../../../../redux/actions';
 import CardHeader from '../../styled/CardHeader';
 import CardTitle from '../../styled/CardTitle';
 import { useParams } from 'react-router-dom';
@@ -12,6 +12,8 @@ import Button from "../../common/buttons/Button";
 import CustomField from "../../common/formControlls/CustomField";
 
 import themesOptions from '../../../../Public/themes/Trafalgar/themeOption';
+
+const ENTITY = 'themes';
 
 // const StyledField = styled(Field)`
 //     width: 100%;
@@ -36,15 +38,15 @@ const Update = () => {
     let {id} = useParams();
     
     const setActiveTheme = () => {
-        dispatch(setActive(id));
+        dispatch(setActive(ENTITY,id));
     }
 
     const onClickDeleteTheme = () => {
-        dispatch(deleteItem(id));
+        dispatch(deleteItem(ENTITY,id));
     }
 
     useEffect(() => {
-        dispatch(getItemData(id));
+        dispatch(getItemData(ENTITY,id));
     }, [id]);
 
     useEffect(() => {
@@ -67,7 +69,7 @@ const Update = () => {
 
     const onSubmit = values => {
         // window.alert(JSON.stringify(values, 0, 2))
-        dispatch(updateItem(values));
+        dispatch(updateItem(ENTITY,values));
     }
 
     return (

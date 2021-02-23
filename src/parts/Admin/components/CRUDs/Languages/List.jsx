@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getItems, setActive, deleteItem, changeSort, applyFilter, setDefault, updatePageSize } from '../../../../../redux/languages-reducer';
+import { getItems, setActive, deleteItem, changeSort, setDefault, applyFilter, updatePageSize } from '../../../../../redux/actions';
 import Action from '../../common/Action';
 import ActionsWrapper from '../../common/ActionsWrapper';
 import Checkbox from '../../common/Checkbox';
@@ -23,6 +23,8 @@ import SubmitButton from '../../common/formControlls/SubmitButton';
 import {Link} from "react-router-dom";
 import Button from "../../common/buttons/Button";
 
+const ENTITY = 'languages';
+const ENTITY_UPPER_CASE = ENTITY.toUpperCase();
 
 const CrudTableHead = (props) => {
     const classValue = (fields, onClick, sortField, sortType) => {
@@ -81,7 +83,7 @@ const List = () => {
     const [isFilterOpen, toggleFilter] = useState(false);
     
     useEffect(() => {
-        dispatch(getItems(currentPage, pageSize));
+        dispatch(getItems(ENTITY, currentPage, pageSize));
         dispatch(setBreadcrumbs([
             {
                 name: 'Dashboard',
@@ -95,23 +97,23 @@ const List = () => {
     }, []);
 
     const setActiveItem = (id) => {
-        dispatch(setActive(id));
+        dispatch(setActive(ENTITY,id));
     }
 
     const setDefaultItem = (id) => {
-        dispatch(setDefault(id));
+        dispatch(setDefault(ENTITY,id));
     }
 
     const onClickDeleteItem = (id) => {
-        dispatch(deleteItem(id));
+        dispatch(deleteItem(ENTITY,id));
     }
 
     const onClickSortTable = (code) => {
-        dispatch(changeSort(sortField, sortType, code));
+        dispatch(changeSort(ENTITY_UPPER_CASE, sortField, sortType, code));
     }
 
     const onPageChange = (pageNumber) => {
-        dispatch(getItems(pageNumber, pageSize));
+        dispatch(getItems(ENTITY,pageNumber, pageSize));
     }
 
     const onClickFilterToggle = () => {
@@ -120,17 +122,17 @@ const List = () => {
 
     const onFilterSubmit = (values) => {
         // window.alert(JSON.stringify(values, 0, 2))
-        dispatch(applyFilter(values));
+        dispatch(applyFilter(ENTITY, values));
     }
     
     const onClickFilterReset = (form) => {
-        dispatch(applyFilter());
+        dispatch(applyFilter(ENTITY));
         form.reset();
     }
 
     const handlePageSizeChange = (value) => {
-        dispatch(updatePageSize(value));
-        dispatch(getItems());
+        dispatch(updatePageSize(ENTITY_UPPER_CASE,value));
+        dispatch(getItems(ENTITY));
     }
 
     const fields = [

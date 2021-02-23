@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {setActive, deleteItem, getItemData, updateItem, setDefault} from '../../../../../redux/languages-reducer';
+import {setActive, deleteItem, getItemData, updateItem, setDefault} from '../../../../../redux/actions';
 import CardHeader from '../../styled/CardHeader';
 import CardTitle from '../../styled/CardTitle';
 import { useParams } from 'react-router-dom';
@@ -12,6 +12,9 @@ import SubmitButton from '../../common/formControlls/SubmitButton';
 import { setBreadcrumbs } from '../../../../../redux/app-reducer';
 import Button from "../../common/buttons/Button";
 import CustomField from "../../common/formControlls/CustomField";
+
+
+const ENTITY = 'languages';
 
 const StyledField = styled(Field)`
     width: 100%;
@@ -27,7 +30,6 @@ const StyledField = styled(Field)`
     outline: none;
     transition: border-color .3s;
 `
-
 const Update = () => {
     const item = useSelector(state => state.languages.item);
 
@@ -35,19 +37,19 @@ const Update = () => {
     let {id} = useParams();
     
     const setActiveLanguage = () => {
-        dispatch(setActive(id));
+        dispatch(setActive(ENTITY,id));
     }
 
     const setDefaultLanguage = () => {
-        dispatch(setDefault(id));
+        dispatch(setDefault(ENTITY,id));
     }
 
     const onClickDeleteLanguage = () => {
-        dispatch(deleteItem(id));
+        dispatch(deleteItem(ENTITY,id));
     }
 
     useEffect(() => {
-        dispatch(getItemData(id));
+        dispatch(getItemData(ENTITY,id));
     }, [id]);
 
     useEffect(() => {
@@ -69,7 +71,7 @@ const Update = () => {
 
     const onSubmit = values => {
         // window.alert(JSON.stringify(values, 0, 2))
-        dispatch(updateItem(values));
+        dispatch(updateItem(ENTITY,values));
     }
 
     return (

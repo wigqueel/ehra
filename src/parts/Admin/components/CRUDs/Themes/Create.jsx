@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {createItem} from '../../../../../redux/themes-reducer';
+import {createItem} from '../../../../../redux/actions';
 import CardHeader from '../../styled/CardHeader';
 import CardTitle from '../../styled/CardTitle';
 import ButtonsWrapper from '../../common/ButtonsWrapper';
@@ -10,6 +10,8 @@ import {Form, Field} from 'react-final-form'
 import {required} from '../../../utils/validators/validators';
 import {setBreadcrumbs} from '../../../../../redux/app-reducer';
 import CustomField from '../../common/formControlls/CustomField';
+
+const ENTITY = 'themes';
 
 const Create = () => {
     const dispatch = useDispatch();
@@ -32,7 +34,7 @@ const Create = () => {
     }, []);
 
     const onSubmit = values => {
-        dispatch(createItem(values));
+        dispatch(createItem(ENTITY, values));
     }
 
     return (

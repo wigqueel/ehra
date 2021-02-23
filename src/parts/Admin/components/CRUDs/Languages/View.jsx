@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {setActive, setDefault, getItemData, deleteItem} from '../../../../../redux/languages-reducer';
+import {setActive, setDefault, getItemData, deleteItem} from '../../../../../redux/actions';
 import CardHeader from '../../styled/CardHeader';
 import CardTitle from '../../styled/CardTitle';
 import {useParams} from 'react-router-dom';
@@ -9,6 +9,8 @@ import ButtonsWrapper from '../../common/ButtonsWrapper';
 import styled from 'styled-components';
 import {setBreadcrumbs} from '../../../../../redux/app-reducer';
 import Button from "../../common/buttons/Button";
+
+const ENTITY = 'languages';
 
 const ViewTable = styled.table`
   text-align: left;
@@ -55,19 +57,19 @@ const View = () => {
         }
 
         const setActiveLanguage = () => {
-            dispatch(setActive(id));
+            dispatch(setActive(ENTITY, id));
         }
 
         const setDefaultLanguage = () => {
-            dispatch(setDefault(id));
+            dispatch(setDefault(ENTITY,id));
         }
 
         const onClickDeleteLanguage = () => {
-            dispatch(deleteItem(id));
+            dispatch(deleteItem(ENTITY,id));
         }
 
         useEffect(() => {
-            dispatch(getItemData(id));
+            dispatch(getItemData(ENTITY,id));
         }, [id]);
 
         useEffect(() => {
